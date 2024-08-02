@@ -1,0 +1,10 @@
+{% extends "sublets/layout.html" %}
+
+{% block title %}Register{% endblock title %}
+{% block body %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+{% endblock body %}
