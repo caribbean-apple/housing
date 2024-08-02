@@ -12,6 +12,8 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
+    Test to see if Tadhg has access
 """
 from django.contrib import admin
 from django.urls import path
@@ -19,5 +21,5 @@ from django.urls import include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("sublets.urls"))
+    path("", include("sublets.urls")),
 ]
