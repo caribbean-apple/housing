@@ -1,20 +1,30 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required #, require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm
+from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm, SendMessageForm
 from .models import User, Listing, ListingPicture
 
 # Create your views here.
 def listing(request, listing_id):
     listing_object = get_object_or_404(Listing, pk=listing_id)
     pictures = ListingPicture.objects.filter(listing=listing_object)
+    send_message_form = SendMessageForm()
     context = {
         'listing': listing_object,
-        'pictures': pictures}
+        'pictures': pictures,
+        'send_message_form': send_message_form}
     return render(request, 'sublets/listing.html', context)
+
+# @require_POST
+def send_message(request):
+    # Get the form data from the request
+    form = SendMessageForm(request.POST)
+    # need sender, recipient, listing, body
+    if form.is_valid():
+        form.save()
 
 def index(request):
     search_form = SearchForm()

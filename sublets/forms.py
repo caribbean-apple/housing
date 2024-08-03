@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Listing
+from .models import User, Listing, Message
 import datetime
 
 SUPPORTED_CITIES = ['Boston Area', 'New York City', 'Philadelphia']
@@ -40,17 +40,23 @@ class ListingForm(forms.Form):
         fields=['description', 'address_line_1', 'city', 'state', 'zip_code', 'rent',
                  'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count']
 
-    def clean(self):
+    def clean_start_date(self):
         cleaned_data = super().clean()
         start_date = cleaned_data.get('start_date')
-        end_date = cleaned_data.get('end_date')
-        bedroom_count = cleaned_data.get('bedroom_count')
         if start_date and start_date < datetime.date.today():
             raise forms.ValidationError("Start date cannot be in the past.")
+        
+    def clean_end_date(self):
+        cleaned_data = super().clean()
+        end_date = cleaned_data.get('end_date')
         if end_date and end_date < datetime.date.today():
             raise forms.ValidationError("End date cannot be in the past.")
-        if start_date and end_date and start_date > end_date:
+        if end_date and end_date < cleaned_data.get('start_date'):
             raise forms.ValidationError("End date must be later than start date.")
+        
+    def clean_bedroom_count(self):
+        cleaned_data = super().clean()
+        bedroom_count = cleaned_data.get('bedroom_count')
         if bedroom_count < 1:
             raise forms.ValidationError("Listings must have at least one bedroom.")
         return cleaned_data
@@ -61,3 +67,8 @@ class SearchForm(forms.Form):
         choices=SUPPORTED_CITIES,
     )
     
+class SendMessageForm(forms.ModelForm):
+    body = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+    class Meta:
+        model = Message
+        fields = ['body']

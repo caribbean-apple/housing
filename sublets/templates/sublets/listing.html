@@ -9,23 +9,36 @@ Sublets - Listing Detail
 {% endblock head %}
 
 {% block body %}
-<div class="container">
-    <h1>Listing Detail</h1>
-    # photos
-    {% for p in pictures %}
-    <img class="listingpicture" src="{{ p.picture.url }}" alt="listing picture">
-    {% empty %}
-    {% endfor %}
+<h1>Listing Detail</h1>
     
-    <p>{{ listing.description }}</p>
-    # description, user who listed
 
+<div class="container-fluid">
+    <div class="row">
+      {% for p in pictures %}
+        <div class="col-4 col-md-3 mb-2">
+          <div class="square-thumbnail" style="background-image: url('{{ p.picture.url }}');"></div>
+        </div>
+      {% empty %}
+        <p>(Listing has no images)</p>
+      {% endfor %}
+    </div>
+  </div>
 
-    # details: listing_type, rent
-    bedrooms, bathrooms
-    full address
-    start and end date
-    last updated date
-
+  {{ listing.get_listing_type_display }}: ${{ listing.rent }} per month<br>
+  {{ listing.bedroom_count }} bedroom{% if listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
+  {{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
+  <strong>Address:</strong><br>
+  {{ listing.address_line_1 }}<br> {{ listing.city }}, {{ listing.state }} {{ listing.zip_code }}<br><br>
+  Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j" }}<br>
+  Last updated: {{ listing.updated_at|date:"F j, Y" }}
+  <br><br>
+  <form action="{% url 'send_message' %}" method="post">
+    {% csrf_token %}
+    {{ send_message_form.non_field_errors }}
+    {{ send_message_form.body.errors }}
+    <label for="{{ send_message_form.body.id_for_label }}">Send a message:</label><br>
+    {{ send_message_form.body }}
+  <button type="submit">Send</button>
+  </form>
 </div>
 {% endblock body %}
