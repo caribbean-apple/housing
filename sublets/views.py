@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm
+from models import Listing, User
 
 # Create your views here.
 def index(request):
@@ -44,9 +47,14 @@ def register_view(request):
     }
     return render(request, 'sublets/register.html', context)
 
-
+#@login_required(login_url='login')
 def search_results(request):
 
-    selected_City=request.POST["Selected_City"]
+    selected_city=request.POST["Selected_City"]
+    relevant_pages=Listing.objects.get(city=selected_city)
+
+    paginated_pages=Paginator(relevant_pages)
+
+
 
     return HttpResponse('Successfully reached Search Results Page')
