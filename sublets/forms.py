@@ -13,6 +13,8 @@ class UserRegistrationForm(UserCreationForm):
         fields = ['username', 'password1', 'password2']
 
 class LoginForm(AuthenticationForm):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
+    # AuthenticationForm is not a ModelForm, so meta class would
+    # have no effect here. It has username and password fields by
+    # default. It has built-in security features compared to
+    # implementing manually.
+    pass
