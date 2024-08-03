@@ -30,15 +30,15 @@ class LoginForm(AuthenticationForm):
     # implementing manually.
     pass
 
-class ListingForm(forms.Form):
+class ListingForm(forms.ModelForm):
     #Form to enter a new listing to the database.
     class Meta:
         # This meta info class is used for ModelForms, whose fields are
         # defined based on what's in the corresponding model (listing model).
         # It determines which fields from the model to include in the form.
-        model=Listing
-        fields=['description', 'address_line_1', 'city', 'state', 'zip_code', 'rent',
-                 'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count']
+        model = Listing
+        fields=['address_line_1', 'city', 'state', 'zip_code', 'rent',
+                 'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count', 'description']
 
     def clean_start_date(self):
         cleaned_data = super().clean()
