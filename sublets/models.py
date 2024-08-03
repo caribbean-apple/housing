@@ -22,6 +22,7 @@ class Listing(models.Model):
     address_line_1 = models.CharField(max_length=35) 
     city = models.CharField(max_length=28, choices=SUPPORTED_CITIES) # 28 according to USPS
     state = models.CharField(max_length=14) # South Carolina is longest
+    zip_code = models.CharField(max_length=5)
     rent = models.DecimalField(max_digits=7, decimal_places=2)
     listing_type = models.CharField(max_length=20, choices=LISTING_TYPES)
     start_date = models.DateField()
