@@ -108,20 +108,8 @@ def create(request):
             listing_to_add.created_by = User.objects.get(username=request.user)
             listing_to_add.save()
 
-            print("Start Date")
-            print(listing_to_add.start_date)
-            print("End Date")
-            print(listing_to_add.end_date)
+            return listing(request, listing_to_add.id)
 
-            #listing(request, listing_to_add.id)
-            return HttpResponse("testing")
-
-        else:
-            print("Start Date")
-            print(listing_to_add.start_date)
-            print("End Date")
-            print(listing_to_add.end_date)
-            return HttpResponse("Form not valid")
 
 
     else:
