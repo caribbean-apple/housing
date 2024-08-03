@@ -9,6 +9,8 @@ class UserRegistrationForm(UserCreationForm):
         # This meta info class is used for ModelForms, whose fields are
         # defined based on what's in the corresponding model (user model).
         # It determines which fields from the model to include in the form.
+        # Generally a ModelForm is used when you want to create or edit lines
+        # in a single existing database table.
         model = User
         fields = ['username', 'password1', 'password2']
 
@@ -18,3 +20,5 @@ class LoginForm(AuthenticationForm):
     # default. It has built-in security features compared to
     # implementing manually.
     pass
+
+# class SearchForm(forms.Form):
