@@ -55,7 +55,7 @@ def register_view(request):
     }
     return render(request, 'sublets/register.html', context)
 
-#@login_required(login_url='login')
+@login_required(login_url='login')
 def search_results(request):
 
     if request.method == "POST":
@@ -82,5 +82,27 @@ def search_results(request):
                     })
 
     else: 
-        return HttpResponse("Testing")
+
+        return redirect('index')
+    
+
+@login_required(login_url='login')
+def create(request):
+
+    listing_form=ListingForm(request.POST or None)
+
+    if request.method == "POST":
+        if listing_form.is_valid():
+
+            listing_to_add = listing_form.save() 
+            listing(request, listing_to_add.id)
+
+
+    else:
+        context = {
+            'listing_form': listing_form
+            }
+    
+    return render(request, 'sublets/create.html', context)
+
     

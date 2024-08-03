@@ -1,0 +1,18 @@
+{% extends 'sublets/layout.html' %}
+{% block title %}
+Sublets - Create Listing
+{% endblock %}
+{% block body %}
+
+
+
+<form action="{% url 'search' %}" method="post">
+    
+    {% csrf_token %}
+ 
+    {{ listing_form.as_p  }}
+
+    <button type="submit">Create Listing</button>
+
+</form>
+{% endblock %}
