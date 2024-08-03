@@ -11,10 +11,8 @@ from .models import User, Listing, ListingPicture
 def listing(request, listing_id):
     listing_object = get_object_or_404(Listing, pk=listing_id)
     pictures = ListingPicture.objects.filter(listing=listing_object)
-    has_pictures = pictures.exists()
     context = {
         'listing': listing_object,
-        'has_pictures': has_pictures,
         'pictures': pictures}
     return render(request, 'sublets/listing.html', context)
 

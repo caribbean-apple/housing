@@ -1,18 +1,22 @@
 {% extends 'sublets/layout.html' %}
-
+{% load static %}
 {% block title %}
 Sublets - Listing Detail
 {% endblock title %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'sublets/css/listing.css' %}">
+{% endblock head %}
 
 {% block body %}
 <div class="container">
     <h1>Listing Detail</h1>
     # photos
-    {% if has_pictures %}
-        {% for p in pictures %}
-        <img class="listingpicture" src="{{ p.picture.url }}" alt="listing picture">
-        {% endfor %}
-    {% endif %}
+    {% for p in pictures %}
+    <img class="listingpicture" src="{{ p.picture.url }}" alt="listing picture">
+    {% empty %}
+    {% endfor %}
+    
     <p>{{ listing.description }}</p>
     # description, user who listed
 
