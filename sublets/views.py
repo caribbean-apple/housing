@@ -108,7 +108,7 @@ def create(request):
             listing_to_add.created_by = User.objects.get(username=request.user)
             listing_to_add.save()
 
-            listing(request, listing_to_add.id)
+            return listing(request, listing_to_add.id)
 
 
 

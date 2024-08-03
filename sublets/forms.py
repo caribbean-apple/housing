@@ -51,14 +51,20 @@ class ListingForm(forms.ModelForm):
         end_date = cleaned_data.get('end_date')
         if end_date and end_date < datetime.date.today():
             raise forms.ValidationError("End date cannot be in the past.")
-        if end_date and end_date < cleaned_data.get('start_date'):
-            raise forms.ValidationError("End date must be later than start date.")
         
     def clean_bedroom_count(self):
         cleaned_data = super().clean()
         bedroom_count = cleaned_data.get('bedroom_count')
         if bedroom_count < 1:
             raise forms.ValidationError("Listings must have at least one bedroom.")
+        return cleaned_data
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        if start_date and end_date and end_date < start_date:
+            raise forms.ValidationError("End date must be later than start date.")
         return cleaned_data
 
 class SearchForm(forms.Form):
