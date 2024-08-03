@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm, SendMessageForm
-from .models import User, Listing, ListingPicture
+from .models import User, Listing, ListingPicture, Message
 
 # Create your views here.
 def listing(request, listing_id):
@@ -71,9 +71,6 @@ def search_results(request):
     if request.method == "POST":
 
         selected_city=request.POST["Selected_City"]
-
-        print(selected_city)
-
         relevant_pages=Listing.objects.filter(city=selected_city)
 
         # Intialize page for pagination
@@ -121,4 +118,35 @@ def create(request):
             }
     return render(request, 'sublets/create.html', context)
 
+
+@login_required
+def messages(request):
+
+    user=User.objects.get(username=request.user)
+
+    outgoing_messages=Message.objects.filter(sender=user)
+    incoming_messages=Message.objects.filter(recipient=user)
+
+    # Intialize page for pagination
+    if request.GET.get('page'):
+        page=request.GET.get('page')
+    else:
+        page=1
+
+    incoming_paginated_pages=Paginator(incoming_messages, 10)
+    outgoing_paginated_pages=Paginator(outgoing_messages, 10)
+    
+    page_obj_in=incoming_paginated_pages.get_page(page)
+    page_obj_out=outgoing_paginated_pages.get_page(page)
+
+    print(outgoing_messages)
+    print(incoming_messages)
+
+
+
+    return render(request, "sublets/messages.html", {
+        "page_obj_in": page_obj_in,
+        "page_obj_out": page_obj_out
+
+    })
     

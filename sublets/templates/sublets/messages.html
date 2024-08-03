@@ -1,0 +1,40 @@
+{% extends 'sublets/layout.html' %}
+{% block title %}
+Sublets - Home
+{% endblock %}
+{% block body %}
+
+
+<div style="width: 75%; margin:auto; border:2px solid black;">
+
+    {% for message in page_obj_in %} 
+    
+    <div class="parent" style="width: 100%; margin:auto; border:2px solid green;">
+
+        <div class="child" style="border:2px solid red; width:100%;  display: inline-block;">   
+
+            From: {{ message.sender.username }} <br>
+            To: {{ message.recipient.username }} <br>
+            Listing: {{ message.listing.address_line_1 }} <br>
+            Message: {{ message.body }} <br>
+            Sent_at: {{ message.sent_at}} <br>
+            
+            <form action="{% url 'index' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Reply</button>
+            </form>
+
+        </div> 
+
+    </div>    
+
+
+    {% empty %}
+        
+        No Messages
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
