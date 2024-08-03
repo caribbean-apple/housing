@@ -4,4 +4,16 @@ Sublets - Home
 {% endblock %}
 {% block body %}
 I set the background color to gray for now to prevent screen glare.
+
+Search Bar:
+
+<form action="{% url 'search' %}" method="post">
+    
+    {% csrf_token %}
+
+    {{ search_form.as_p }}
+
+    <button type="submit">Search</button>
+
+</form>
 {% endblock %}
