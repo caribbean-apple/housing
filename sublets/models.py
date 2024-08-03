@@ -43,6 +43,8 @@ class Listing(models.Model):
     bathroom_count=models.CharField(max_length=14, choices=BATHROOM_OPTIONS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f'{self.city} - listing by {self.created_by} at {self.zip_code}'
 
 def listing_picture_path(instance, filename):
     return f'listing_pictures/{instance.listing.id}/{filename}'
@@ -66,3 +68,5 @@ class Message(models.Model):
     body = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+    def __str__(self):
+        return f'Message from {self.sender} to {self.recipient} ({self.sent_at})'
