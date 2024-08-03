@@ -2,6 +2,14 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User, Listing
 
+SUPPORTED_CITIES = ['Boston Area', 'New York City', 'Philadelphia']
+
+SUPPORTED_CITIES = {'Boston Area': 'Boston Area',
+        'New York City': 'New York City',
+        'Philadelphia': 'Philadelphia'
+        }
+    
+
 class UserRegistrationForm(UserCreationForm):
     # Username and password are included by default through UserCreationForm.
     # Can add fields here later if we need more information from registration
@@ -27,6 +35,13 @@ class ListingForm(forms.Form):
         # It determines which fields from the model to include in the form.
         model=Listing
         fields=['description', 'address_line_1', 'city', 'state', 'zip_code', 'rent',
-                 'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count' ]
+                 'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count']
 
     pass
+
+class SearchForm(forms.Form):
+
+    Selected_City = forms.MultipleChoiceField(
+        choices=SUPPORTED_CITIES,
+    )
+    

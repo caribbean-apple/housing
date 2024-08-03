@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import UserRegistrationForm, LoginForm
+from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm
 
 # Create your views here.
 def index(request):
-    return render(request, 'sublets/index.html')
+    search_form = SearchForm()
+    context = {'search_form': search_form}
+    return render(request, 'sublets/index.html', context)
 
 def login_view(request):
     if request.method == "POST":
@@ -44,5 +46,7 @@ def register_view(request):
 
 
 def search_results(request):
+
+    selected_City=request.POST["Selected_City"]
 
     return HttpResponse('Successfully reached Search Results Page')
