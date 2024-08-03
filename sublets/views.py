@@ -58,11 +58,29 @@ def register_view(request):
 #@login_required(login_url='login')
 def search_results(request):
 
-    selected_city=request.POST["Selected_City"]
-    relevant_pages=Listing.objects.get(city=selected_city)
+    if request.method == "POST":
 
-    paginated_pages=Paginator(relevant_pages)
+        selected_city=request.POST["Selected_City"]
 
+        print(selected_city)
 
+        relevant_pages=Listing.objects.filter(city=selected_city)
 
-    return HttpResponse('Successfully reached Search Results Page')
+        # Intialize page for pagination
+        if request.GET.get('page'):
+            page=request.GET.get('page')
+        else:
+            page=1
+
+        paginated_pages=Paginator(relevant_pages, 10)
+        page_obj=paginated_pages.get_page(page)
+
+        #Render Page
+
+        return render(request, "sublets/search_results.html",{
+                    "page_obj": page_obj
+                    })
+
+    else: 
+        return HttpResponse("Testing")
+    
