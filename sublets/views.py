@@ -109,7 +109,8 @@ def create(request):
             listing_to_add.save()
 
             return listing(request, listing_to_add.id)
-
+        else:
+            return HttpResponse("Invalid form")
 
 
     else:
