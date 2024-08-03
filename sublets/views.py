@@ -109,11 +109,16 @@ def create(request):
             listing_to_add.save()
 
             return listing(request, listing_to_add.id)
-
+        else:
+            return HttpResponse("Invalid form")
     context = {
             'listing_form': listing_form
             }
     
+
+    context = {
+            'listing_form': listing_form
+            }
     return render(request, 'sublets/create.html', context)
 
     
