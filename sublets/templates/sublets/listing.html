@@ -1,0 +1,27 @@
+{% extends 'sublets/layout.html' %}
+
+{% block title %}
+Sublets - Listing Detail
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <h1>Listing Detail</h1>
+    # photos
+    {% if has_pictures %}
+        {% for p in pictures %}
+        <img class="listingpicture" src="{{ p.picture.url }}" alt="listing picture">
+        {% endfor %}
+    {% endif %}
+    <p>{{ listing.description }}</p>
+    # description, user who listed
+
+
+    # details: listing_type, rent
+    bedrooms, bathrooms
+    full address
+    start and end date
+    last updated date
+
+</div>
+{% endblock body %}

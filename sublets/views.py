@@ -1,9 +1,21 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from .forms import UserRegistrationForm, LoginForm
+from .models import User, Listing, ListingPicture
 
 # Create your views here.
+def listing(request, listing_id):
+    listing_object = get_object_or_404(Listing, pk=listing_id)
+    pictures = ListingPicture.objects.filter(listing=listing_object)
+    has_pictures = pictures.exists()
+    context = {
+        'listing': listing_object,
+        'has_pictures': has_pictures,
+        'pictures': pictures}
+    return render(request, 'sublets/listing.html', context)
+
 def index(request):
     return render(request, 'sublets/index.html')
 
@@ -40,3 +52,8 @@ def register_view(request):
         'registration_form': registration_form
     }
     return render(request, 'sublets/register.html', context)
+
+
+def search_results(request):
+
+    return HttpResponse('Successfully reached Search Results Page')
