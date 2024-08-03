@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, LoginForm
 
 # Create your views here.
 def index(request):
@@ -19,14 +19,16 @@ def login_view(request):
             return render(request, 'sublets/login.html', {
                 'message': 'Invalid username and/or password.'
             })
-    return render(request, 'sublets/login.html')
+    login_form = LoginForm()
+    context = {'login_form': login_form}
+    return render(request, 'sublets/login.html', context)
 
 def logout_view(request):
     logout(request)
     return redirect('index')
 
 def register_view(request):
-    registration_form = UserRegistrationForm(request.Post or None)
+    registration_form = UserRegistrationForm(request.POST or None)
     if registration_form.is_valid(): # This returns False if method != POST
         # This returns the newly created User object, because for any
         # ModelForm, .save() returns the newly created model object.

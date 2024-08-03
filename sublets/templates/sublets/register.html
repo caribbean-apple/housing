@@ -4,7 +4,15 @@
 {% block body %}
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <label for="{{ registration_form.username.id_for_label }}">Username:</label>
+        {{ registration_form.username }}
+        {{ registration_form.username.errors }}<br><br>
+    <label for="{{ registration_form.password1.id_for_label }}">Password:</label>
+    {{ registration_form.password1 }}
+    {{ registration_form.password1.errors }}<br><br>
+    <label for="{{ registration_form.password2.id_for_label }}">Password confirmation:</label>
+    {{ registration_form.password2 }}
+    {{ registration_form.password2.errors }}<br><br>
     <button type="submit">Register</button>
 </form>
 {% endblock body %}
