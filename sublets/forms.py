@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User, Listing
+import datetime
 
 SUPPORTED_CITIES = ['Boston Area', 'New York City', 'Philadelphia']
 
@@ -39,7 +40,20 @@ class ListingForm(forms.Form):
         fields=['description', 'address_line_1', 'city', 'state', 'zip_code', 'rent',
                  'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count']
 
-    pass
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        bedroom_count = cleaned_data.get('bedroom_count')
+        if start_date and start_date < datetime.date.today():
+            raise forms.ValidationError("Start date cannot be in the past.")
+        if end_date and end_date < datetime.date.today():
+            raise forms.ValidationError("End date cannot be in the past.")
+        if start_date and end_date and start_date > end_date:
+            raise forms.ValidationError("End date must be later than start date.")
+        if bedroom_count < 1:
+            raise forms.ValidationError("Listings must have at least one bedroom.")
+        return cleaned_data
 
 class SearchForm(forms.Form):
 
