@@ -110,17 +110,10 @@ def create(request):
 
             return listing(request, listing_to_add.id)
 
-
-
-    else:
-        context = {
-            'listing_form': listing_form
-            }
-    
-
     context = {
             'listing_form': listing_form
             }
+    
     return render(request, 'sublets/create.html', context)
 
     
