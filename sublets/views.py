@@ -96,7 +96,7 @@ def search_results(request):
         return redirect('index')
     
 
-@login_required(login_url='login')
+@login_required
 def create(request):
 
     listing_form=ListingForm(request.POST or None)
@@ -104,8 +104,12 @@ def create(request):
     if request.method == "POST":
         if listing_form.is_valid():
 
-            listing_to_add = listing_form.save() 
+            listing_to_add = listing_form.save(commit=False)
+            listing_to_add.created_by = User.objects.get(username=request.user)
+            listing_to_add.save()
+
             listing(request, listing_to_add.id)
+
 
 
     else:
@@ -113,6 +117,10 @@ def create(request):
             'listing_form': listing_form
             }
     
+
+    context = {
+            'listing_form': listing_form
+            }
     return render(request, 'sublets/create.html', context)
 
     
