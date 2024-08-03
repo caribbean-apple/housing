@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from .forms import UserRegistrationForm, LoginForm
 
 # Create your views here.
@@ -40,3 +41,8 @@ def register_view(request):
         'registration_form': registration_form
     }
     return render(request, 'sublets/register.html', context)
+
+
+def search_results(request):
+
+    return HttpResponse('Successfully reached Search Results Page')
