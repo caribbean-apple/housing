@@ -6,9 +6,10 @@ Sublets - Create Listing
 
 
 
-<form action="{% url 'search' %}" method="post">
+<form action="{% url 'create' %}" method="post">
     
     {% csrf_token %}
+
  
     {{ listing_form.as_p  }}
 
