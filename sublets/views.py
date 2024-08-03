@@ -100,28 +100,20 @@ def search_results(request):
 def create(request):
 
     listing_form=ListingForm(request.POST or None)
-
+    print("===Request.POST===")
+    print(request.POST)
+    print("----")
+    print("===LISTING_FORM.ERRORS ====")
+    print(listing_form.errors)
     if request.method == "POST":
+        listing_form = ListingForm(request.POST)
         if listing_form.is_valid():
-
             listing_to_add = listing_form.save(commit=False)
-            listing_to_add.created_by = User.objects.get(username=request.user)
+            listing_to_add.created_by = request.user
             listing_to_add.save()
-
             return listing(request, listing_to_add.id)
-        else:
-            return HttpResponse("Invalid form")
 
-
-    else:
-        context = {
-            'listing_form': listing_form
-            }
-    
-
-    context = {
-            'listing_form': listing_form
-            }
+    context = { 'listing_form': listing_form }
     return render(request, 'sublets/create.html', context)
 
     
