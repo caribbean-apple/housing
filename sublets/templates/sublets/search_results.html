@@ -42,7 +42,7 @@ Sublets - Search Results
     {% endfor %}
 
     <div class="pagination" style="margin : auto; text-align: center;">
-        <span class="step-links"  style="margin : auto;"">
+        <span class="step-links"  style="margin : auto;">
             {% if page_obj.has_previous %}
                 <a href="?selected_city={{ selected_city }}&page=1">&laquo; first</a>
                 <a href="?selected_city={{ selected_city }}&page={{ page_obj.previous_page_number }}">previous</a>
