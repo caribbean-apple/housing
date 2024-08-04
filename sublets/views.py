@@ -32,7 +32,6 @@ def listing(request, listing_id):
         
     elif request.method == "DELETE":
         # Form for user to delete own listing
-        breakpoint()
         listing_object = get_object_or_404(Listing, pk=listing_id)
         if not request.user.is_authenticated:
             return JsonResponse(
