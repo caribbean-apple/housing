@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 class User(AbstractUser):
@@ -69,4 +70,6 @@ class Message(models.Model):
     sent_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     def __str__(self):
-        return f'Message from {self.sender} to {self.recipient} ({self.sent_at})'
+        formatted_time = timezone.localtime(self.sent_at).strftime("%m.%d.%Y %H:%M")
+        message_segment = self.body[:40] + '...' if len(self.body) > 40 else self.body
+        return f'From {self.sender} to {self.recipient} ({formatted_time}): {self.body}'

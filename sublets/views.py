@@ -5,19 +5,25 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.urls import reverse
 from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm, SendMessageForm
 from .models import User, Listing, ListingPicture, Message
 
 # Create your views here.
 def listing(request, listing_id):
+    form = SendMessageForm(request.POST or None)
+    if request.user.is_authenticated and request.method == "POST":
+        if form.is_valid():
+            # Handle form submission, then refresh page
+            form.process_and_save(sender=request.user)
+            return redirect('listing', listing_id=listing_id)
     listing_object = get_object_or_404(Listing, pk=listing_id)
     pictures = ListingPicture.objects.filter(listing=listing_object)
-    send_message_form = SendMessageForm()
     context = {
         'listing': listing_object,
         'pictures': pictures,
-        'send_message_form': send_message_form}
-    return render(request, 'sublets/listing.html', context) 
+        'send_message_form': form}
+    return render(request, 'sublets/listing.html', context)
 
 @require_POST
 def send_message(request):
@@ -25,11 +31,7 @@ def send_message(request):
     form = SendMessageForm(request.POST)
     # need sender, recipient, listing, body
     if form.is_valid():
-        message = form.save(commit=False)
-        message.sender = form.cleaned_data['sender']
-        message.recipient = form.cleaned_data['recipient']
-        message.listing = form.cleaned_data['listing']
-        message.save()
+        form.process_and_save(sender=request.user)
         return redirect(f'listing/{listing.id}')
 
 def index(request):

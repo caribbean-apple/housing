@@ -78,6 +78,21 @@ class SearchForm(forms.Form):
     
 class SendMessageForm(forms.ModelForm):
     body = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+    recipient_id = forms.IntegerField(widget=forms.HiddenInput())
+    listing_id = forms.IntegerField(widget=forms.HiddenInput())
     class Meta:
         model = Message
         fields = ['body']
+
+    def process_and_save(self, sender=None, commit=True):
+        if sender is None:
+            raise ValueError("Must specify sender to save a message.")
+        if not self.is_valid():
+            raise ValueError("Check if message form is valid before saving.")
+        message = super().save(commit=False)
+        message.sender = sender
+        message.recipient = User.objects.get(id=self.cleaned_data['recipient_id'])
+        message.listing = Listing.objects.get(id=self.cleaned_data['listing_id'])
+        if commit:
+            message.save()
+        return message

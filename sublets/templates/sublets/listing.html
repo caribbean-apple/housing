@@ -29,19 +29,19 @@ Sublets - Listing Detail
   {{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
   <strong>Address:</strong><br>
   {{ listing.address_line_1 }}<br> {{ listing.city }}, {{ listing.state }} {{ listing.zip_code }}<br><br>
-  Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j" }}<br>
+  Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j, Y" }}<br>
   Last updated: {{ listing.updated_at|date:"F j, Y" }}
   <br><br>
-  <form action="{% url 'send_message' %}" method="post">
-    <!-- Work in progress -->
-    # need sender, recipient, listing, body
+  {% if user.is_authenticated %}
+  <form method="post">
     {% csrf_token %}
-    <input type="hidden" name="sender" value={{ listing.created_by.id }}>
+    <input type="hidden" name="recipient_id" value={{ listing.created_by.id }}>
+    <input type="hidden" name="listing_id" value={{ listing.id }}>
     {{ send_message_form.non_field_errors }}
     {{ send_message_form.body.errors }}
     <label for="{{ send_message_form.body.id_for_label }}">Send a message:</label><br>
     {{ send_message_form.body }}
-
+  {% endif %}
   <button type="submit">Send</button>
   </form>
 </div>
