@@ -25,7 +25,7 @@ def send_message(request):
     form = SendMessageForm(request.POST)
     # need sender, recipient, listing, body
     if form.is_valid():
-        form.save()
+        message = form.save(commit=False)
 
 def index(request):
     search_form = SearchForm()
