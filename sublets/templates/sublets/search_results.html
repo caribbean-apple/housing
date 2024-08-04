@@ -21,7 +21,7 @@ Sublets - Search Results
             Type: {{ listin.listing_type }}<br>
             Description: {{ listing.description }}
 
-            <form action="{% url 'index' %}" method="post">
+            <form action="{% url 'listing' listing.id %}" method="post" >
                 {% csrf_token %}
                 <button type="submit">See More</button>
             </form>
