@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required #, require_POST
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
@@ -18,7 +19,7 @@ def listing(request, listing_id):
         'send_message_form': send_message_form}
     return render(request, 'sublets/listing.html', context)
 
-# @require_POST
+@require_POST
 def send_message(request):
     # Get the form data from the request
     form = SendMessageForm(request.POST)
