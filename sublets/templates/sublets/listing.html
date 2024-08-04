@@ -33,11 +33,15 @@ Sublets - Listing Detail
   Last updated: {{ listing.updated_at|date:"F j, Y" }}
   <br><br>
   <form action="{% url 'send_message' %}" method="post">
+    <!-- Work in progress -->
+    # need sender, recipient, listing, body
     {% csrf_token %}
+    <input type="hidden" name="sender" value={{ listing.created_by.id }}>
     {{ send_message_form.non_field_errors }}
     {{ send_message_form.body.errors }}
     <label for="{{ send_message_form.body.id_for_label }}">Send a message:</label><br>
     {{ send_message_form.body }}
+
   <button type="submit">Send</button>
   </form>
 </div>

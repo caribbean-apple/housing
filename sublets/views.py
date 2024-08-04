@@ -26,6 +26,11 @@ def send_message(request):
     # need sender, recipient, listing, body
     if form.is_valid():
         message = form.save(commit=False)
+        message.sender = form.cleaned_data['sender']
+        message.recipient = form.cleaned_data['recipient']
+        message.listing = form.cleaned_data['listing']
+        message.save()
+        return redirect(f'listing/{listing.id}')
 
 def index(request):
     search_form = SearchForm()
@@ -66,7 +71,6 @@ def register_view(request):
     }
     return render(request, 'sublets/register.html', context)
 
-@login_required(login_url='login')
 def search_results(request):
 
     if request.method == "POST":

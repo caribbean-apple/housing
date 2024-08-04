@@ -3,12 +3,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User, Listing, Message
 import datetime
 
-SUPPORTED_CITIES = ['Boston Area', 'New York City', 'Philadelphia']
-
-SUPPORTED_CITIES = {'Boston Area': 'Boston Area',
-        'New York City': 'New York City',
-        'Philadelphia': 'Philadelphia'
-        }
+SUPPORTED_CITIES = [
+    ('Boston Area', 'Boston Area'),
+    ('New York City', 'New York City'),
+    ('Philadelphia', 'Philadelphia'),
+]
     
 
 class UserRegistrationForm(UserCreationForm):
@@ -73,8 +72,7 @@ class ListingForm(forms.ModelForm):
         return cleaned_data
 
 class SearchForm(forms.Form):
-
-    Selected_City = forms.MultipleChoiceField(
+    selected_city = forms.MultipleChoiceField(
         choices=SUPPORTED_CITIES,
     )
     
