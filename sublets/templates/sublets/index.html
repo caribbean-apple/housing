@@ -7,9 +7,7 @@ I set the background color to gray for now to prevent screen glare.
 
 Search Bar:
 
-<form action="{% url 'search' %}" method="post">
-    
-    {% csrf_token %}
+<form action="{% url 'search' %}" method="get">
 
     {{ search_form }}
 

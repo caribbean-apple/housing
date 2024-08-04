@@ -72,10 +72,10 @@ def register_view(request):
     return render(request, 'sublets/register.html', context)
 
 def search_results(request):
-
-    if request.method == "POST":
-
-        selected_city=request.POST["Selected_City"]
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        selected_city=form.cleaned_data["selected_city"]
+        print("selected city", selected_city)
         relevant_pages=Listing.objects.filter(city=selected_city)
 
         # Intialize page for pagination
@@ -94,7 +94,7 @@ def search_results(request):
                     })
 
     else: 
-
+        print("Form is not valid")
         return redirect('index')
     
 
@@ -108,7 +108,7 @@ def create(request):
             listing_to_add = listing_form.save(commit=False)
             listing_to_add.created_by = request.user
             listing_to_add.save()
-            return listing(request, listing_to_add.id)
+            return redirect('listing', listing_to_add.id)
 
     context = { 'listing_form': listing_form }
     return render(request, 'sublets/create.html', context)

@@ -72,7 +72,7 @@ class ListingForm(forms.ModelForm):
         return cleaned_data
 
 class SearchForm(forms.Form):
-    selected_city = forms.MultipleChoiceField(
+    selected_city = forms.ChoiceField(
         choices=SUPPORTED_CITIES,
     )
     

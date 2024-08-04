@@ -1,2 +1,4 @@
-Django>=4.1
-Pillow>=9.4.0
+# These package versions were used to build the project.
+# Other versions (especially newer ones) may work as well.
+Django==4.1
+Pillow==9.4.0
