@@ -84,13 +84,14 @@ def search_results(request):
         else:
             page=1
 
-        paginated_pages=Paginator(relevant_pages, 10)
+        paginated_pages=Paginator(relevant_pages, 2)
         page_obj=paginated_pages.get_page(page)
 
         #Render Page
 
         return render(request, "sublets/search_results.html",{
-                    "page_obj": page_obj
+                    "page_obj": page_obj,
+                    "selected_city": selected_city
                     })
 
     else: 
