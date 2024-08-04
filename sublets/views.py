@@ -17,7 +17,7 @@ def listing(request, listing_id):
         'listing': listing_object,
         'pictures': pictures,
         'send_message_form': send_message_form}
-    return render(request, 'sublets/listing.html', context)
+    return render(request, 'sublets/listing.html', context) 
 
 @require_POST
 def send_message(request):
