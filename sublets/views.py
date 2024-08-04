@@ -3,20 +3,51 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from django.urls import reverse
 from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm, SendMessageForm
 from .models import User, Listing, ListingPicture, Message
 
 # Create your views here.
+def profile(request):
+    # user = request.user
+    # listings = Listing.objects.filter(created_by=user)
+    # context = {
+    #     'listings': listings
+    # }
+    return render(request, 'sublets/profile.html', context)
+
 def listing(request, listing_id):
     form = SendMessageForm(request.POST or None)
-    if request.user.is_authenticated and request.method == "POST":
+
+    if request.method == "POST":
+        # Form to send message to listing owner
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden("You must be logged in to send a message.")
         if form.is_valid():
             # Handle form submission, then refresh page
             form.process_and_save(sender=request.user)
             return redirect('listing', listing_id=listing_id)
+        
+    elif request.method == "DELETE":
+        # Form for user to delete own listing
+        breakpoint()
+        listing_object = get_object_or_404(Listing, pk=listing_id)
+        if not request.user.is_authenticated:
+            return JsonResponse(
+                {'error': 'You must be logged in to delete a listing.'},
+                status=403)
+        if listing_object.created_by != request.user:
+            return JsonResponse(
+                {'error': "You are not allowed to \
+                 delete another user's listing."}, 
+                status=403)
+        listing_object.delete()
+        return JsonResponse(
+            {'message': 'Successfully deleted listing.'},
+            status=200)
+    
     listing_object = get_object_or_404(Listing, pk=listing_id)
     pictures = ListingPicture.objects.filter(listing=listing_object)
     context = {

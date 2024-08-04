@@ -12,4 +12,5 @@ urlpatterns = [
     path("create/", views.create, name="create"),
     path("message/", views.messages, name="messages"),
     path("send-message", views.send_message, name="send_message"),
+    path("profile/", views.profile, name="profile"),
 ]
