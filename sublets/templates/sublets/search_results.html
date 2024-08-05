@@ -21,10 +21,7 @@ Sublets - Search Results
             Type: {{ listin.listing_type }}<br>
             Description: {{ listing.description }}
 
-            <form action="{% url 'listing' listing.id %}" method="post" >
-                {% csrf_token %}
-                <button type="submit">See More</button>
-            </form>
+            <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary">See more</a>
             </p>
             </div> 
         <div class="child" style="width:36%; border:2px solid blue; display: inline-block; "> PHOTO SPACE
