@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
@@ -14,4 +15,7 @@ urlpatterns = [
     path("send-message", views.send_message, name="send_message"),
     path("profile/<int:user_id>/", views.profile, name="profile"),
     path("profile-setup", views.profile_setup, name="profile_setup"),
+    path("robots.txt",
+        TemplateView.as_view(template_name="robots.txt", 
+                             content_type="text/plain"), name="robots"),
 ]
