@@ -6,6 +6,22 @@ from django.utils import timezone
 class User(AbstractUser):
     saved_listings = models.ManyToManyField("Listing", related_name="users_who_saved")
 
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    looking_for = models.TextField(blank=True)
+    about_me = models.TextField(blank=True)
+
+    def __str__(self):
+        bio = self.bio[:30] + '...' if len(self.bio) > 30 else self.bio
+        return f"Profile: {self.user.username}. {bio}"
+    
+
+class ProfilePicture(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='profile_pictures/')
+
+
 class Listing(models.Model):
     # These two lists are for the choices parameter of CharField,
     # which takes in iterables containing (actual value, human readable name)
@@ -47,8 +63,10 @@ class Listing(models.Model):
     def __str__(self):
         return f'{self.city} - listing by {self.created_by} at {self.zip_code}'
 
+
 def listing_picture_path(instance, filename):
     return f'listing_pictures/{instance.listing.id}/{filename}'
+
 
 class ListingPicture(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='pictures')
@@ -61,6 +79,7 @@ class ListingPicture(models.Model):
         # listing does not yet exist.
         upload_to=listing_picture_path
     )
+
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_outbox')

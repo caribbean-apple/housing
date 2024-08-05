@@ -5,17 +5,32 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
-from django.urls import reverse
-from .forms import UserRegistrationForm, LoginForm, ListingForm, SearchForm, SendMessageForm
+from .forms import UserRegistrationForm, LoginForm, ListingForm
+from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .models import User, Listing, ListingPicture, Message
 
 # Create your views here.
-def profile(request):
-    # user = request.user
-    # listings = Listing.objects.filter(created_by=user)
-    # context = {
-    #     'listings': listings
-    # }
+def profile_setup(request):
+    profile_form = UserProfileForm(request.POST or None)
+    if request.method == "POST":
+        if profile_form.is_valid():
+            user_id = profile_form.cleaned_data['user_id']
+            profile_user = get_object_or_404(User, id=user_id)
+            profile_form.process_and_save(profile_user=profile_user)
+            return redirect('profile', user_id=user_id)
+    context = {}
+    return render(request, 'sublets/profile-setup.html', context)
+
+def profile(request, user_id):
+    profile_user = get_object_or_404(User, id=user_id)
+    has_profile = hasattr(profile_user, 'profile')
+
+    context = {
+        'profile_user': profile_user,
+        'has_profile': has_profile
+    }
+    if has_profile:
+        context['profile'] = profile_user.profile
     return render(request, 'sublets/profile.html', context)
 
 def listing(request, listing_id):

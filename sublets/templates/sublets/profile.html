@@ -1,0 +1,39 @@
+{% extends 'sublets/layout.html' %}
+{% block title %}
+Sublets - Profile
+{% endblock %}
+{% block body %}
+
+{% if has_profile %}
+    <p>(Under construction: Photos will go here)</p>
+    About me:
+    {% if profile_user == user %}
+    <button id="edit-about-me-button" class="btn btn-primary" type="button" >Edit</button>
+    <br>
+    {% endif %}
+    {{ profile.about_me }}<br>
+    <br>
+
+    I'm looking for:
+    {% if profile_user == user %}
+    <button id="edit-looking-for-button" class="btn btn-primary" type="button" >Edit</button>
+    {% endif %}
+    <br>
+    {{ profile.looking_for }}<br>
+{% else %}
+    {% if profile_user == user %}
+    Your profile is empty. 
+
+    Fill it out to be chosen for the best sublets out there!<br>
+    <br>
+
+    <button id="create-profile-button" class="btn btn-primary" type="button" >Get started</button>
+    {% else %}
+    This user has an empty profile.
+
+    Want to poke them to set up their profile?
+    <button id="poke-user-button" class="btn btn-primary" type="button" >Poke</button>
+    {% endif %}
+{% endif %}
+
+{% endblock %}

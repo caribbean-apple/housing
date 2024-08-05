@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Listing, Message
+from .models import User, Listing, Message, UserProfile
 import datetime
 
 SUPPORTED_CITIES = [
@@ -8,7 +8,23 @@ SUPPORTED_CITIES = [
     ('New York City', 'New York City'),
     ('Philadelphia', 'Philadelphia'),
 ]
+
+class UserProfileForm(forms.ModelForm):
+    user_id = forms.IntegerField(widget=forms.HiddenInput())
+    class Meta:
+        model = UserProfile
+        fields = ['looking_for', 'about_me']
     
+    def process_and_save(self, profile_user=None, commit=True):
+        if profile_user is None:
+            raise ValueError("Must specify user_id to save a UserProfile.")
+        if not self.is_valid():
+            raise ValueError("Check if form is valid before saving.")
+        profile = super().save(commit=False)
+        profile.user = profile_user
+        if commit:
+            profile.save()
+        return profile
 
 class UserRegistrationForm(UserCreationForm):
     # Username and password are included by default through UserCreationForm.
