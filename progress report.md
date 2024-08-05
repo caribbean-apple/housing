@@ -48,7 +48,7 @@ O This is just a JS reload of the inbox page that lets you view the content any 
 
 #### User Profile Page
 ~ Throughout the site (including the search results page and listing pages), wherever you see a username you can click it, bringing you to that user's profile. If it is your own profile, an edit button appears that adds in the fields with JS for you to edit
-Comment: Models, forms, and view are done but not tested. Html template about halfway done.  Currently building "profile setup" page. Still need to add links throughout the site.
+Comment: All done, except for editing profile functionality. Maybe he will letus skip that so I'll do it last. Also need to add links to profiles in search results.
 
 #### Additional Features / Tasks
 O Incorporates at least one CSS animation
