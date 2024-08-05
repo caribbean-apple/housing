@@ -17,6 +17,7 @@ function load_messages() {
 
   // Select the two buttons for both the archive and respond button
   const message_button = document.querySelectorAll(".message_button");
+  const reply_button = document.querySelector(".send_button")
 
   // loop through each button and add a click event listener
   message_button.forEach(function(button) {
@@ -28,9 +29,18 @@ function load_messages() {
 
               document.querySelector('#respond').style.display = 'block';
 
+              repsond(button.id)
+
+              
+              
+
+
 
             });
           });
+}
 
+function repsond(id){
+    
 
 }

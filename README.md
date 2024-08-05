@@ -1,4 +1,10 @@
 # housing
+Runing list of things to work on 
+    Delete listing available to all users
+    No current way to favorite items
+    No way to deactivate a listing if the user owns it.
+    Create listing photos uploads neads work.  Need to figure out the multiple photo upload.
+
 
 Challenges Experienced:
 
