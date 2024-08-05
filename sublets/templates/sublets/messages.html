@@ -1,6 +1,4 @@
 {% extends 'sublets/layout.html' %}
-
-
 {% load static %}
 
 {% block title %}
@@ -8,14 +6,31 @@ Sublets - Home
 {% endblock %}
 {% block body %}
 
-<div id="show_emails" style="width: 75%; margin:auto; border:2px solid black;">
+<div id="respond" >
 
-    Testing the Javascript
+    <div style="width: 75%; margin:auto; border:2px solid black;">
 
+            <div class="child" style="border:2px solid red; width:100%;  display: inline-block;">   
+
+                From: <p id="From"></p>
+                To: <p id="To"></p>
+                Listing: <p id="Listing"></p>
+                Message: <p id="Message"></p>
+                Sent at: <p id="Sent_at"></p>
+
+                Response:<br> <textarea id="response_message" style="width:75%;"> </textarea> <br>
+
+
+
+            <button class="send_button" type="submit">Send Reply</button>
+
+        </div> 
+
+    </div>
 </div>
 
 
-<div id="show_messages" style="width: 75%; margin:auto; border:2px solid black;">
+<div id="show-messages" style="width: 75%; margin:auto; border:2px solid black;">
 
     {% for message in page_obj_in %} 
     
@@ -66,5 +81,5 @@ Sublets - Home
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'sublet/Javascript/messages.js' %}"></script>
+    <script type="text/javascript" src="{% static 'sublets/JS/messages.js' %}"></script>
 {% endblock %}

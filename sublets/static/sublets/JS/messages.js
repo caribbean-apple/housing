@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#show-messages').style.display = 'block';
   document.querySelector('#respond').style.display = 'none';
 
-  alert("successful load")
-
   load_messages()
 
 })
@@ -18,13 +16,19 @@ function load_messages() {
   document.querySelector('#respond').style.display = 'none';
 
   // Select the two buttons for both the archive and respond button
-  message_button = document.querySelector(".message_button");
+  const message_button = document.querySelectorAll(".message_button");
 
   // loop through each button and add a click event listener
   message_button.forEach(function(button) {
             button.addEventListener("click", function() {
               // do something when the button is clicked
-              alert(button.class)
+              
+              
+              alert(button.id)
+
+              document.querySelector('#respond').style.display = 'block';
+
+
             });
           });
 
