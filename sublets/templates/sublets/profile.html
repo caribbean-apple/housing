@@ -26,12 +26,12 @@ Sublets - Profile
 
     Fill it out to be chosen for the best sublets out there!<br>
     <br>
-
-    <button id="create-profile-button" class="btn btn-primary" type="button" >Get started</button>
+    <a href="{% url 'profile_setup' %}" class="btn btn-primary" role="button" id="create-profile-button">Get started</a>
     {% else %}
     This user has an empty profile.
 
-    Want to poke them to set up their profile?
+    Want to poke them to set up their profile?<br>
+    Note: This is not implemented as it was not part of the specifications and is out of scope.<br>
     <button id="poke-user-button" class="btn btn-primary" type="button" >Poke</button>
     {% endif %}
 {% endif %}
