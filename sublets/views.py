@@ -6,14 +6,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from .forms import UserRegistrationForm, LoginForm, ListingForm
-from .forms import UserProfileForm, SendMessageForm, SearchForm
+from .forms import UserProfileForm, SendMessageForm, SearchForm, ListingPictureForm
 from .models import User, Listing, ListingPicture, Message
 import random
 
 # Create your views here.
 def profile_setup(request):
-    if not request.user.is_authenticated:
-        return redirect('index')
     profile_form = UserProfileForm(request.POST or None)
     if request.method == "POST":
         if profile_form.is_valid():
@@ -38,6 +36,7 @@ def profile(request, user_id):
 
 def listing(request, listing_id):
     form = SendMessageForm(request.POST or None)
+
     if request.method == "POST":
         # Form to send message to listing owner
         if not request.user.is_authenticated:
@@ -63,6 +62,7 @@ def listing(request, listing_id):
         return JsonResponse(
             {'message': 'Successfully deleted listing.'},
             status=200)
+    
     listing_object = get_object_or_404(Listing, pk=listing_id)
     pictures = ListingPicture.objects.filter(listing=listing_object)
     context = {
@@ -73,8 +73,6 @@ def listing(request, listing_id):
 
 @require_POST
 def send_message(request):
-    if not request.user.is_authenticated:
-        return redirect('index')
     # Get the form data from the request
     form = SendMessageForm(request.POST)
     # need sender, recipient, listing, body
@@ -95,8 +93,6 @@ def index(request):
 
 def login_view(request):
     login_form = LoginForm(data=request.POST or None)
-    if request.user.is_authenticated:
-        return redirect('index')
     if request.method == "POST":
         if login_form.is_valid():
             username = login_form.cleaned_data['username']
@@ -109,14 +105,10 @@ def login_view(request):
     return render(request, 'sublets/login.html', context)
 
 def logout_view(request):
-    if not request.user.is_authenticated:
-        return redirect('index')
     logout(request)
     return redirect('index')
 
 def register_view(request):
-    if request.user.is_authenticated:
-        return redirect('index')
     registration_form = UserRegistrationForm(request.POST or None)
     if registration_form.is_valid(): # This returns False if method != POST
         # This returns the newly created User object, because for any
@@ -160,10 +152,9 @@ def search_results(request):
 
 @login_required
 def create(request):
-    if not request.user.is_authenticated:
-        return redirect('index')
 
     listing_form=ListingForm(request.POST or None)
+    picture_form=ListingPictureForm(request.POST or None)
     if request.method == "POST":
         listing_form = ListingForm(request.POST)
         if listing_form.is_valid():
@@ -172,15 +163,13 @@ def create(request):
             listing_to_add.save()
             return redirect('listing', listing_to_add.id)
 
-    context = { 'listing_form': listing_form }
+    context = { 'listing_form': listing_form, 'picture_form': picture_form }
     return render(request, 'sublets/create.html', context)
 
 
 @login_required
 def messages(request):
-    if not request.user.is_authenticated:
-        return redirect('index')
-    
+
     user=User.objects.get(username=request.user)
 
     outgoing_messages=Message.objects.filter(sender=user)
@@ -192,11 +181,6 @@ def messages(request):
     else:
         page=1
 
-    # I am seeing warnings here (to-do):
-    # C:\housing\sublets\views.py:197: UnorderedObjectListWarning: 
-    # Pagination may yield inconsistent results with an unordered object_list: <class 'sublets.models.Message'> QuerySet.
-    # C:\housing\sublets\views.py:198: UnorderedObjectListWarning: 
-    # Pagination may yield inconsistent results with an unordered object_list: <class 'sublets.models.Message'> QuerySet.
     incoming_paginated_pages=Paginator(incoming_messages, 10)
     outgoing_paginated_pages=Paginator(outgoing_messages, 10)
     

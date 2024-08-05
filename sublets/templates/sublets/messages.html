@@ -1,11 +1,21 @@
 {% extends 'sublets/layout.html' %}
+
+
+{% load static %}
+
 {% block title %}
 Sublets - Home
 {% endblock %}
 {% block body %}
 
+<div id="show_emails" style="width: 75%; margin:auto; border:2px solid black;">
 
-<div style="width: 75%; margin:auto; border:2px solid black;">
+    Testing the Javascript
+
+</div>
+
+
+<div id="show_messages" style="width: 75%; margin:auto; border:2px solid black;">
 
     {% for message in page_obj_in %} 
     
@@ -19,10 +29,8 @@ Sublets - Home
             Message: {{ message.body }} <br>
             Sent_at: {{ message.sent_at}} <br>
             
-            <form action="{% url 'index' %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Reply</button>
-            </form>
+
+            <button class="message_button" id="test" type="submit">Reply</button>
 
         </div> 
 
@@ -55,4 +63,8 @@ Sublets - Home
 
 </div>
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'sublet/Javascript/messages.js' %}"></script>
 {% endblock %}
