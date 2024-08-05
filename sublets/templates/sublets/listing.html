@@ -9,7 +9,12 @@ Sublets - Listing Detail
 {% endblock head %}
 
 {% block body %}
-<h1>Listing Detail</h1>
+<div class="listing-page-header"><h1>Listing Detail</h1>
+<button id="listing-delete-button" 
+data-listing-id="{{listing.id}}" 
+type="button" class="btn btn-primary">Delete Listing</button>
+</div>
+<div class="error-message-container"></div>
     
 
 <div class="container-fluid">
@@ -39,10 +44,36 @@ Sublets - Listing Detail
     <input type="hidden" name="listing_id" value={{ listing.id }}>
     {{ send_message_form.non_field_errors }}
     {{ send_message_form.body.errors }}
-    <label for="{{ send_message_form.body.id_for_label }}">Send a message:</label><br>
+    <label for="{{ send_message_form.body.id_for_label }}">Send a message to the listing owner:</label><br>
     {{ send_message_form.body }}
   {% endif %}
   <button type="submit">Send</button>
   </form>
+  <script>
+    const button = document.getElementById('listing-delete-button');
+    button.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete your listing?')) {
+        const listingId = button.dataset.listingId;
+        fetch(`/listing/${listingId}`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Got error while deleting listing.');
+          }
+          window.location.href = '/';
+        })
+        .catch(error => {
+          console.error("Caught error:", error);
+          const errorContainer = document.querySelector('.error-message-container');
+          errorContainer.innerHTML = error.message;
+        });
+      }
+    });
+
+  </script>
 </div>
 {% endblock body %}

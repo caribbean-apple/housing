@@ -1,0 +1,23 @@
+{% extends 'sublets/layout.html' %}
+{% block title %}
+Sublets - Profile Setup
+{% endblock %}
+{% block body %}
+
+(To do: Implement pictures)
+
+<form method="post">
+    {% csrf_token %}
+    {{ profile_form.user_id }}
+
+    <input type="hidden" name="user_id" value="{{ user.id }}">
+    
+    <label for="{{ profile_form.looking_for.id_for_label }}">What are you looking for?</label><br>
+    {{ profile_form.looking_for }}<br><br>
+    
+    <label for="{{ profile_form.about_me.id_for_label }}">Introduce yourself to people offering a sublet:</label><br>
+    {{ profile_form.about_me }}
+    <br><br>
+    <button type="submit" class="btn btn-primary">Save Profile</button>
+</form>
+{% endblock %}

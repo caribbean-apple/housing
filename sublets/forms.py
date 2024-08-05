@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Listing, Message
+from .models import User, Listing, Message, UserProfile
 import datetime
 
 SUPPORTED_CITIES = [
@@ -8,7 +8,27 @@ SUPPORTED_CITIES = [
     ('New York City', 'New York City'),
     ('Philadelphia', 'Philadelphia'),
 ]
+
+class UserProfileForm(forms.ModelForm):
+    user_id = forms.IntegerField(widget=forms.HiddenInput())
+    class Meta:
+        model = UserProfile
+        fields = ['looking_for', 'about_me']
+        widgets = {
+            'looking_for': forms.Textarea(attrs={'rows': 4, 'cols': 45}),
+            'about_me': forms.Textarea(attrs={'rows': 4, 'cols': 45}),
+        }
     
+    def process_and_save(self, profile_user=None, commit=True):
+        if profile_user is None:
+            raise ValueError("Must specify user_id to save a UserProfile.")
+        if not self.is_valid():
+            raise ValueError("Check if form is valid before saving.")
+        profile = super().save(commit=False)
+        profile.user = profile_user
+        if commit:
+            profile.save()
+        return profile
 
 class UserRegistrationForm(UserCreationForm):
     # Username and password are included by default through UserCreationForm.
@@ -27,6 +47,9 @@ class LoginForm(AuthenticationForm):
     # have no effect here. It has username and password fields by
     # default. It has built-in security features compared to
     # implementing manually.
+    # Annoyingly, when passing in data with request.POST, you must
+    # specify LoginForm(data=request.POST), because the first argument
+    # is not data, unlike other forms.
     pass
 
 class ListingForm(forms.ModelForm):
