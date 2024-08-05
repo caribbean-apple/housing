@@ -14,6 +14,10 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['looking_for', 'about_me']
+        widgets = {
+            'looking_for': forms.Textarea(attrs={'rows': 4, 'cols': 45}),
+            'about_me': forms.Textarea(attrs={'rows': 4, 'cols': 45}),
+        }
     
     def process_and_save(self, profile_user=None, commit=True):
         if profile_user is None:
@@ -43,6 +47,9 @@ class LoginForm(AuthenticationForm):
     # have no effect here. It has username and password fields by
     # default. It has built-in security features compared to
     # implementing manually.
+    # Annoyingly, when passing in data with request.POST, you must
+    # specify LoginForm(data=request.POST), because the first argument
+    # is not data, unlike other forms.
     pass
 
 class ListingForm(forms.ModelForm):

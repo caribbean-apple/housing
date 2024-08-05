@@ -18,7 +18,7 @@ def profile_setup(request):
             profile_user = get_object_or_404(User, id=user_id)
             profile_form.process_and_save(profile_user=profile_user)
             return redirect('profile', user_id=user_id)
-    context = {}
+    context = {'profile_form': profile_form}
     return render(request, 'sublets/profile-setup.html', context)
 
 def profile(request, user_id):
@@ -85,18 +85,15 @@ def index(request):
     return render(request, 'sublets/index.html', context)
 
 def login_view(request):
+    login_form = LoginForm(data=request.POST or None)
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            return render(request, 'sublets/login.html', {
-                'message': 'Invalid username and/or password.'
-            })
-    login_form = LoginForm()
+        if login_form.is_valid():
+            username = login_form.cleaned_data['username']
+            password = login_form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')
     context = {'login_form': login_form}
     return render(request, 'sublets/login.html', context)
 
