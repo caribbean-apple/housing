@@ -25,10 +25,8 @@ Sublets - Home
             Message: {{ message.body }} <br>
             Sent_at: {{ message.sent_at}} <br>
             
-            <form action="{% url 'index' %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Reply</button>
-            </form>
+
+            <button class="message_button" id="test" type="submit">Reply</button>
 
         </div> 
 
@@ -61,4 +59,8 @@ Sublets - Home
 
 </div>
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'sublet/Javascript/messages.js' %}"></script>
 {% endblock %}
