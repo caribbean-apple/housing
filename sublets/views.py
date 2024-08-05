@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 from .forms import UserRegistrationForm, LoginForm, ListingForm
 from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .models import User, Listing, ListingPicture, Message
+import random
 
 # Create your views here.
 def profile_setup(request):
@@ -84,6 +85,12 @@ def send_message(request):
 def index(request):
     search_form = SearchForm()
     context = {'search_form': search_form}
+    listing_ids = Listing.objects.values_list('id', flat=True)
+    if listing_ids:
+        featured_listing = Listing.objects.get(id=random.choice(listing_ids))
+        context['featured_listing'] = featured_listing
+        pictures = ListingPicture.objects.filter(listing=featured_listing)
+        context['pictures'] = pictures
     return render(request, 'sublets/index.html', context)
 
 def login_view(request):

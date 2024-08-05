@@ -1,0 +1,35 @@
+/* This CSS applies to every page extending layout.html */
+
+body {
+    /* temporary background color to reduce screen glare */
+    background-color:rgb(128, 128, 128) 
+}
+
+.error-message-container {
+    color: red;
+}
+
+.verticalspace {
+    height: 150px;
+}
+
+#city-selector {
+    width: 150px;
+}
+
+.listingpicture {
+    width: 200px;
+}
+
+.square-thumbnail {
+    width: 100%;
+    padding-bottom: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+#listing-message-textarea {
+    width: 70%;
+    max-width: 600px;
+}

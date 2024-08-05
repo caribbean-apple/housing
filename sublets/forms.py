@@ -97,10 +97,11 @@ class ListingForm(forms.ModelForm):
 class SearchForm(forms.Form):
     selected_city = forms.ChoiceField(
         choices=SUPPORTED_CITIES,
+        widget=forms.Select(attrs={'id': 'city-selector'})
     )
     
 class SendMessageForm(forms.ModelForm):
-    body = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}))
+    body = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'id': 'listing-message-textarea'}))
     recipient_id = forms.IntegerField(widget=forms.HiddenInput())
     listing_id = forms.IntegerField(widget=forms.HiddenInput())
     class Meta:

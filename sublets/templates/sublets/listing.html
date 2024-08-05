@@ -18,62 +18,62 @@ type="button" class="btn btn-primary">Delete Listing</button>
     
 
 <div class="container-fluid">
-    <div class="row">
-      {% for p in pictures %}
-        <div class="col-4 col-md-3 mb-2">
-          <div class="square-thumbnail" style="background-image: url('{{ p.picture.url }}');"></div>
-        </div>
-      {% empty %}
-        <p>(Listing has no images)</p>
-      {% endfor %}
-    </div>
+  <div class="row">
+    {% for pic in pictures %}
+      <div class="col-4 col-md-3 mb-2">
+        <div class="square-thumbnail" style="background-image: url('{{ pic.picture.url }}');"></div>
+      </div>
+    {% empty %}
+      <p>(Listing has no images)</p>
+    {% endfor %}
   </div>
+</div>
 
-  {{ listing.get_listing_type_display }}: ${{ listing.rent }} per month<br>
-  {{ listing.bedroom_count }} bedroom{% if listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
-  {{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
-  <strong>Address:</strong><br>
-  {{ listing.address_line_1 }}<br> {{ listing.city }}, {{ listing.state }} {{ listing.zip_code }}<br><br>
-  Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j, Y" }}<br>
-  Last updated: {{ listing.updated_at|date:"F j, Y" }}
-  <br><br>
-  {% if user.is_authenticated %}
-  <form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="recipient_id" value={{ listing.created_by.id }}>
-    <input type="hidden" name="listing_id" value={{ listing.id }}>
-    {{ send_message_form.non_field_errors }}
-    {{ send_message_form.body.errors }}
-    <label for="{{ send_message_form.body.id_for_label }}">Send a message to the listing owner:</label><br>
-    {{ send_message_form.body }}
-  {% endif %}
-  <button type="submit">Send</button>
-  </form>
-  <script>
-    const button = document.getElementById('listing-delete-button');
-    button.addEventListener('click', () => {
-      if (confirm('Are you sure you want to delete your listing?')) {
-        const listingId = button.dataset.listingId;
-        fetch(`/listing/${listingId}`, {
-          method: 'DELETE',
-          headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-          }
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Got error while deleting listing.');
-          }
-          window.location.href = '/';
-        })
-        .catch(error => {
-          console.error("Caught error:", error);
-          const errorContainer = document.querySelector('.error-message-container');
-          errorContainer.innerHTML = error.message;
-        });
-      }
-    });
+{{ listing.get_listing_type_display }}: ${{ listing.rent }} per month<br>
+{{ listing.bedroom_count }} bedroom{% if listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
+{{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
+<strong>Address:</strong><br>
+{{ listing.address_line_1 }}<br> {{ listing.city }}, {{ listing.state }} {{ listing.zip_code }}<br><br>
+Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j, Y" }}<br>
+Last updated: {{ listing.updated_at|date:"F j, Y" }}
+<br><br>
+{% if user.is_authenticated %}
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="recipient_id" value={{ listing.created_by.id }}>
+  <input type="hidden" name="listing_id" value={{ listing.id }}>
+  {{ send_message_form.non_field_errors }}
+  {{ send_message_form.body.errors }}
+  <label for="{{ send_message_form.body.id_for_label }}">Send a message to the listing owner:</label><br>
+  {{ send_message_form.body }}
+{% endif %}
+<button type="submit">Send</button>
+</form>
+<script>
+  const button = document.getElementById('listing-delete-button');
+  button.addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete your listing?')) {
+      const listingId = button.dataset.listingId;
+      fetch(`/listing/${listingId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Got error while deleting listing.');
+        }
+        window.location.href = '/';
+      })
+      .catch(error => {
+        console.error("Caught error:", error);
+        const errorContainer = document.querySelector('.error-message-container');
+        errorContainer.innerHTML = error.message;
+      });
+    }
+  });
 
-  </script>
+</script>
 </div>
 {% endblock body %}

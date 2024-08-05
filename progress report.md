@@ -54,7 +54,7 @@ Comment: All done, except for editing profile functionality. Maybe he will letus
 O Incorporates at least one CSS animation
 
 ~ Incorporates a tests.py file with at least two tests. One must use selenium.
-Comment: Non-selenium test is done. Waiting for us to have more interaction/JS before making a selenium test.
+Comment: Non-selenium test is done. Waiting for us to have more interactivity/JS before making a selenium test.
 
 O Any single-page app features (like in the inbox) still have browser history and back button support
 
