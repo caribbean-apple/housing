@@ -76,6 +76,7 @@ class ListingForm(forms.ModelForm):
     #Form to enter a new listing to the database.
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    pictures = forms.FileField(widget=ClearableFileInput(attrs={'multiple': True}), required=False)
     class Meta:
         # This meta info class is used for ModelForms, whose fields are
         # defined based on what's in the corresponding model (listing model).
@@ -147,3 +148,6 @@ class ListingPictureForm(forms.ModelForm):
     class Meta:
         model = ListingPicture
         fields = ['listing', 'picture']
+        widgets = {
+            'picture': forms.ClearableFileInput(attrs={'multiple': True})
+        }

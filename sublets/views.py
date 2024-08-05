@@ -153,17 +153,21 @@ def search_results(request):
 @login_required
 def create(request):
 
-    listing_form=ListingForm(request.POST or None)
-    picture_form=ListingPictureForm(request.POST or None)
+    # listing_form=ListingForm(request.POST or None)
+    # picture_form=ListingPictureForm(request.POST or None)
     if request.method == "POST":
-        listing_form = ListingForm(request.POST)
+        listing_form = ListingForm(data=request.POST, files=request.FILES)
         if listing_form.is_valid():
             listing_to_add = listing_form.save(commit=False)
             listing_to_add.created_by = request.user
             listing_to_add.save()
-            return redirect('listing', listing_to_add.id)
 
-    context = { 'listing_form': listing_form, 'picture_form': picture_form }
+            for picture in request.FILES.getlist('pictures'):
+                ListingPicture.objects.create(listing=listing, picture=picture)
+            return redirect('listing', listing_to_add.id)
+    else:
+        listing_form = ListingForm()
+    context = { 'listing_form': listing_form} #, 'picture_form': picture_form }
     return render(request, 'sublets/create.html', context)
 
 
