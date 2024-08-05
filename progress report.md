@@ -8,7 +8,7 @@ X Has a search bar allowing the user to specify location by choosing a city from
 
 X Has login or register buttons on the top right nav
 
-O Landing page has featured listing example. Clicking brings you to that listing page.
+X Landing page has featured listing example. Clicking brings you to that listing page.
 
 #### Register Page
 X Here you register with a name, email, password.
