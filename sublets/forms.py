@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Listing, Message, UserProfile
+from django.forms import ClearableFileInput
+from .models import User, Listing, Message, UserProfile, ListingPicture
 import datetime
 
 SUPPORTED_CITIES = [
@@ -8,6 +9,25 @@ SUPPORTED_CITIES = [
     ('New York City', 'New York City'),
     ('Philadelphia', 'Philadelphia'),
 ]
+
+# Attempt to get Multiple photos uploaded.
+# class MultipleFileInput(forms.ClearableFileInput):
+#     allow_multiple_selected = True
+
+# class MultipleFileField(forms.FileField):
+#     def __init__(self, *args, **kwargs):
+#         kwargs.setdefault("widget", MultipleFileInput())
+#         super().__init__(*args, **kwargs)
+
+#     def clean(self, data, initial=None):
+#         single_file_clean = super().clean
+#         if isinstance(data, (list, tuple)):
+#             result = [single_file_clean(d, initial) for d in data]
+#         else:
+#             result = [single_file_clean(data, initial)]
+#         return result
+
+
 
 class UserProfileForm(forms.ModelForm):
     user_id = forms.IntegerField(widget=forms.HiddenInput())
@@ -119,3 +139,10 @@ class SendMessageForm(forms.ModelForm):
         if commit:
             message.save()
         return message
+    
+
+class ListingPictureForm(forms.ModelForm):
+
+    class Meta:
+        model = ListingPicture
+        fields = ['listing', 'picture']

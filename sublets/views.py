@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from .forms import UserRegistrationForm, LoginForm, ListingForm
-from .forms import UserProfileForm, SendMessageForm, SearchForm
+from .forms import UserProfileForm, SendMessageForm, SearchForm, ListingPictureForm
 from .models import User, Listing, ListingPicture, Message
 
 # Create your views here.
@@ -147,6 +147,7 @@ def search_results(request):
 def create(request):
 
     listing_form=ListingForm(request.POST or None)
+    picture_form=ListingPictureForm(request.POST or None)
     if request.method == "POST":
         listing_form = ListingForm(request.POST)
         if listing_form.is_valid():
@@ -155,7 +156,7 @@ def create(request):
             listing_to_add.save()
             return redirect('listing', listing_to_add.id)
 
-    context = { 'listing_form': listing_form }
+    context = { 'listing_form': listing_form, 'picture_form': picture_form }
     return render(request, 'sublets/create.html', context)
 
 

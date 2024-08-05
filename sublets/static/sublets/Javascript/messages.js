@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#show-messages').style.display = 'block';
   document.querySelector('#respond').style.display = 'none';
 
+  alert("successful load")
+
   load_messages()
 
 })
