@@ -1,8 +1,11 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ClearableFileInput
-from .models import User, Listing, Message, UserProfile, ListingPicture
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.validators import FileExtensionValidator
+
 import datetime
+from .models import User, Listing, Message, UserProfile
+from .util import file_size_5mb
 
 SUPPORTED_CITIES = [
     ('Boston Area', 'Boston Area'),
@@ -13,6 +16,13 @@ SUPPORTED_CITIES = [
 
 class UserProfileForm(forms.ModelForm):
     user_id = forms.IntegerField(widget=forms.HiddenInput())
+    pictures = forms.FileField(widget=forms.ClearableFileInput(
+        attrs={'multiple': True}), 
+        required=False,
+        validators=[
+            FileExtensionValidator(['jpg', 'jpeg', 'gif', 'png', 'webp']),
+            file_size_5mb
+        ])
     class Meta:
         model = UserProfile
         fields = ['looking_for', 'about_me']
@@ -58,7 +68,8 @@ class ListingForm(forms.ModelForm):
     # Form to enter a new listing to the database.
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    pictures = forms.FileField(widget=ClearableFileInput(attrs={'multiple': True}), required=False)
+    pictures = forms.FileField(widget=ClearableFileInput(
+        attrs={'multiple': True}), required=False)
     class Meta:
         # This meta info class is used for ModelForms, whose fields are
         # defined based on what's in the corresponding model (listing model).
@@ -123,13 +134,3 @@ class SendMessageForm(forms.ModelForm):
         if commit:
             message.save()
         return message
-    
-
-class ListingPictureForm(forms.ModelForm):
-
-    class Meta:
-        model = ListingPicture
-        fields = ['listing', 'picture']
-        widgets = {
-            'picture': forms.ClearableFileInput(attrs={'multiple': True})
-        }

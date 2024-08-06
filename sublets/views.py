@@ -1,23 +1,30 @@
-from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
-from .forms import UserRegistrationForm, LoginForm, ListingForm
-from .forms import UserProfileForm, SendMessageForm, SearchForm, ListingPictureForm
-from .models import User, Listing, ListingPicture, Message
+from django.http import HttpResponseForbidden, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 import random
+from .forms import UserRegistrationForm, LoginForm, ListingForm
+from .forms import UserProfileForm, SendMessageForm, SearchForm
+from .models import User, Listing, ListingPicture, Message, ProfilePicture
 
 # Create your views here.
 def profile_setup(request):
-    profile_form = UserProfileForm(request.POST or None)
+    profile_form = UserProfileForm(data=request.POST or None,
+                                   files=request.FILES or None)
     if request.method == "POST":
         if profile_form.is_valid():
             user_id = profile_form.cleaned_data['user_id']
             profile_user = get_object_or_404(User, id=user_id)
             profile_form.process_and_save(profile_user=profile_user)
+            # breakpoint()
+
+            for picture in request.FILES.getlist('pictures'):
+                ProfilePicture.objects.create(
+                    user=profile_user,
+                    picture=picture
+                )
             return redirect('profile', user_id=user_id)
     context = {'profile_form': profile_form}
     return render(request, 'sublets/profile-setup.html', context)
@@ -32,6 +39,7 @@ def profile(request, user_id):
     }
     if has_profile:
         context['profile'] = profile_user.profile
+        context['profile_pictures'] = profile_user.profile_pictures.all()
     return render(request, 'sublets/profile.html', context)
 
 def listing(request, listing_id):
