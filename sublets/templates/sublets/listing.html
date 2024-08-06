@@ -10,9 +10,11 @@ Sublets - Listing Detail
 
 {% block body %}
 <div class="listing-page-header"><h1>Listing Detail</h1>
-<button id="listing-delete-button" 
-data-listing-id="{{listing.id}}" 
-type="button" class="btn btn-primary">Delete Listing</button>
+{% if listing.created_by == user %}
+  <button id="listing-delete-button" 
+  data-listing-id="{{listing.id}}" 
+  type="button" class="btn btn-primary">Delete Listing</button>
+{% endif %}
 </div>
 <div class="error-message-container"></div>
     
