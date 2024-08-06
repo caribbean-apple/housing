@@ -79,6 +79,9 @@ class ListingPicture(models.Model):
         # listing does not yet exist.
         upload_to=listing_picture_path
     )
+    # order = models.PositiveIntegerField(default=0)
+    # class Meta:
+    #     ordering = ['order']
 
 
 class Message(models.Model):

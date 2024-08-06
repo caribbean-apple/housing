@@ -37,7 +37,7 @@ type="button" class="btn btn-primary">Delete Listing</button>
 Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j, Y" }}<br>
 Last updated: {{ listing.updated_at|date:"F j, Y" }}
 <br><br>
-{% if user.is_authenticated %}
+{% if user.is_authenticated and listing.created_by != user %}
 <form method="post">
   {% csrf_token %}
   <input type="hidden" name="recipient_id" value={{ listing.created_by.id }}>
@@ -46,8 +46,8 @@ Last updated: {{ listing.updated_at|date:"F j, Y" }}
   {{ send_message_form.body.errors }}
   <label for="{{ send_message_form.body.id_for_label }}">Send a message to the listing owner:</label><br>
   {{ send_message_form.body }}
+  <button type="submit">Send</button>
 {% endif %}
-<button type="submit">Send</button>
 </form>
 <script>
   const button = document.getElementById('listing-delete-button');
