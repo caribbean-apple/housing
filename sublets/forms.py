@@ -10,24 +10,6 @@ SUPPORTED_CITIES = [
     ('Philadelphia', 'Philadelphia'),
 ]
 
-# Attempt to get Multiple photos uploaded.
-# class MultipleFileInput(forms.ClearableFileInput):
-#     allow_multiple_selected = True
-
-# class MultipleFileField(forms.FileField):
-#     def __init__(self, *args, **kwargs):
-#         kwargs.setdefault("widget", MultipleFileInput())
-#         super().__init__(*args, **kwargs)
-
-#     def clean(self, data, initial=None):
-#         single_file_clean = super().clean
-#         if isinstance(data, (list, tuple)):
-#             result = [single_file_clean(d, initial) for d in data]
-#         else:
-#             result = [single_file_clean(data, initial)]
-#         return result
-
-
 
 class UserProfileForm(forms.ModelForm):
     user_id = forms.IntegerField(widget=forms.HiddenInput())
@@ -73,7 +55,7 @@ class LoginForm(AuthenticationForm):
     pass
 
 class ListingForm(forms.ModelForm):
-    #Form to enter a new listing to the database.
+    # Form to enter a new listing to the database.
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     pictures = forms.FileField(widget=ClearableFileInput(attrs={'multiple': True}), required=False)
@@ -107,7 +89,7 @@ class ListingForm(forms.ModelForm):
     def clean(self):
         print("CLEANING")
         # Must call super().clean() in clean(), but not in clean_x.
-        # This is enough to run all validation defined in ModelForm.
+        # This is enough to run the validation defined in ModelForm.
         cleaned_data = super().clean()
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')
