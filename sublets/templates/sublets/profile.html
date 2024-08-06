@@ -5,7 +5,17 @@ Sublets - Profile
 {% block body %}
 
 {% if has_profile %}
-    <p>(Under construction: Photos will go here)</p>
+    <div class="container-fluid">
+        <div class="row">
+        {% for pic in profile_pictures %}
+            <div class="col-4 col-md-3 mb-2">
+            <div class="square-thumbnail" style="background-image: url('{{ pic.picture.url }}');"></div>
+            </div>
+        {% empty %}
+            <p>(Profile has no pictures)</p>
+        {% endfor %}
+        </div>
+    </div>
     About me:
     {% if profile_user == user %}
     <button id="edit-about-me-button" class="btn btn-primary" type="button" >Edit</button>

@@ -4,11 +4,8 @@ Sublets - Profile Setup
 {% endblock %}
 {% block body %}
 
-(To do: Implement pictures)
-
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ profile_form.user_id }}
 
     <input type="hidden" name="user_id" value="{{ user.id }}">
     
@@ -18,6 +15,8 @@ Sublets - Profile Setup
     <label for="{{ profile_form.about_me.id_for_label }}">Introduce yourself to people offering a sublet:</label><br>
     {{ profile_form.about_me }}
     <br><br>
+    <label for="{{ profile_form.picture.id_for_label }}">Upload a picture of yourself:</label><br>
+    {{ profile_form.pictures }}
     <button type="submit" class="btn btn-primary">Save Profile</button>
 </form>
 {% endblock %}

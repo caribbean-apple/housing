@@ -29,8 +29,7 @@ X There is a textarea that lets you send a message for that listing.
 X If it is your listing, you can delete it.
 
 #### Create Listing Page
-~ Here you can create a listing. You must upload a photo, specify an address, and write a description. Rent can be specified here.
-Comment: Missing add photo functionality.
+X Here you can create a listing. You must upload a photo, specify an address, and write a description. Rent can be specified here.
 
 #### Saved Listings Page
 O Accessible via the top nav menu if logged in. Shows saved listings, displayed the same way as in search results, with an option to delete the listing via clicking a trash can icon to the right of that listing.

@@ -13,12 +13,13 @@ class UserProfile(models.Model):
     about_me = models.TextField(blank=True)
 
     def __str__(self):
-        bio = self.bio[:30] + '...' if len(self.bio) > 30 else self.bio
-        return f"Profile: {self.user.username}. {bio}"
+        about_me_segment = self.about_me[:30] + '...' if len(self.about_me) > 30 else self.about_me
+        return f"Profile: {self.user.username}. {about_me_segment}"
     
 
 class ProfilePicture(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="profile_pictures")
     picture = models.ImageField(upload_to='profile_pictures/')
 
 
@@ -79,9 +80,6 @@ class ListingPicture(models.Model):
         # listing does not yet exist.
         upload_to=listing_picture_path
     )
-    # order = models.PositiveIntegerField(default=0)
-    # class Meta:
-    #     ordering = ['order']
 
 
 class Message(models.Model):
