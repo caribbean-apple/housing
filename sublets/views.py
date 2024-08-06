@@ -197,4 +197,18 @@ def messages(request):
         "page_obj_out": page_obj_out
 
     })
+
+
+def message_fetch(request, message_id):
+
+    # Query for requested message
+
+    print(message_id)
+    try:
+        message_to_return = Message.objects.get(pk=message_id)
+    except message_to_return.DoesNotExist:
+        return JsonResponse({"error": "message not found."}, status=404)
+
+
+    return JsonResponse({"Success": "message found."}, status=200)
     

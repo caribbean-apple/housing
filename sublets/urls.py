@@ -20,6 +20,8 @@ urlpatterns = [
                              content_type="text/plain"), name="robots"),
 
 
-    # API Calls for Asyncronous calls.
+    # API Calls for Asyncronous calls for messages.
+
+    path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
     
 ]
