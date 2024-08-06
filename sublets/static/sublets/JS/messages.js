@@ -23,24 +23,36 @@ function load_messages() {
   message_button.forEach(function(button) {
             button.addEventListener("click", function() {
               // do something when the button is clicked
-              
-              
-              alert(button.id)
 
-              document.querySelector('#respond').style.display = 'block';
-
-              repsond(button.id)
+              respond(button.id)
 
               
-              
 
-
+          
 
             });
           });
+
+  // TODO Add a refresh page to get all the images again.
 }
 
-function repsond(id){
-    
+function respond(id){
+  alert(id)
+  document.querySelector('#respond').style.display = 'block';
+
+  //TODO Get message information and populate the javascript
+
+  individual_message_confirm=fetch('/message_info/'+id)      
+    .then(response => response.json())
+    .then(single_message => {
+                // Print emails
+                console.log(single_message);
+              
+              
+              })
+
+
+  //TODO Set up event listener for reply button that pushes message to an api that adds to the messages model.
+
 
 }
