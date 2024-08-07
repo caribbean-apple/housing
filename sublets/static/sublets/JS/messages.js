@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Show compose view and hide other views
   document.querySelector('#show-messages').style.display = 'block';
   document.querySelector('#respond').style.display = 'none';
+  document.querySelector('#response_form').style.display = 'none';
 
   load_messages()
 
@@ -34,6 +35,7 @@ function load_messages() {
 
 function respond(id){
   document.querySelector('#respond').style.display = 'block';
+  document.querySelector('#response_form').style.display = 'block';
   document.querySelector('#show-messages').style.display = 'none';
 
   //TODO Get message information and populate the javascript
@@ -43,7 +45,7 @@ function respond(id){
     .then(single_message => {
 
                 console.log(single_message);
-                document.querySelector('#respond').innerHTML = `
+                document.querySelector('#respond_message').innerHTML = `
                 <hr>
                   ID: ${String(single_message.id)} <br>
                   Sender: ${single_message.sender} <br>
@@ -53,21 +55,15 @@ function respond(id){
                   Timestap: ${single_message.timestamp} <br>
                   <br>
                 <hr>
-                
-                Response:<br> <textarea id="response_message" style="width:75%;"> </textarea> <br></br>
-                <button class="send_button" type="submit">Send Reply</button>
-                `
 
-                document.querySelector('.send_button').addEventListener("click", function(){
-                  console.log('send_button pressed')
-                  })
-                  .then(response =>{ 
-                    console.log(response)
-                    load_mailbox('inbox')
-                  })
-              
+                `;
+
+                 document.querySelector('.recipient_id').value= single_message.sender_id;
+                 document.querySelector('.listing_id').value= single_message.listing_id;
+          
               
               })
+
 
 
   //TODO Set up event listener for reply button that pushes message to an api that adds to the messages model.

@@ -6,7 +6,27 @@ Sublets - Home
 {% endblock %}
 {% block body %}
 
-<div id="respond" >
+<div id="respond">
+    <div id="respond_message" >
+
+    </div>
+
+    <div id="response_form">
+
+    <form action="{% url 'send_message' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="recipient_id" value="1">
+        <input type="hidden" class="listing_id" value="1">
+        {{ send_message_form.non_field_errors }}
+        {{ send_message_form.body.errors }}
+        <label for="{{ send_message_form.body.id_for_label }}">Reply to this message:</label><br>
+        {{ send_message_form.body }}
+        <br>
+        <button type="submit">Send</button>
+    </form>
+
+    </div>
+
 
 </div>
 

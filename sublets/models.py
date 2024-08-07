@@ -97,6 +97,7 @@ class Message(models.Model):
         return {
             "id": self.id,
             "sender": self.sender.username,
+            "sender_id": self.sender.id,
             "recipient": [self.recipient.username],
             "body": self.body,
             "listing": self.listing.address_line_1,
