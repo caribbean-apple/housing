@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_PUT
 import random
+import json
 from .forms import UserRegistrationForm, LoginForm, ListingForm
 from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .models import User, Listing, ListingPicture, Message, ProfilePicture
@@ -17,10 +18,17 @@ def saved_listings(request):
     context = {'saved_listings': listings}
     return render(request, 'sublets/saved-listings.html', context)
 
-# def save_listing(request):
-#     # Handle the PUT request from JS
-#     if request.method == "PUT":
+@require_PUT
+@login_required
+def save_or_unsave_listing(request):
+    # Handle the PUT request from JS
+    data = json.loads(request.body)
+    save_or_unsave = data.get('save_or_unsave')
+    listing_id = data.get('listing_id')
+    user = request.user
 
+
+ 
 # Create your views here.
 def profile_setup(request):
     profile_form = UserProfileForm(data=request.POST or None,

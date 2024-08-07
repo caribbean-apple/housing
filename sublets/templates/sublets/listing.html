@@ -14,6 +14,18 @@ Sublets - Listing Detail
   <button id="listing-delete-button" 
   data-listing-id="{{listing.id}}" 
   type="button" class="btn btn-primary">Delete Listing</button>
+{% else %}
+
+  if listing not in saved listings
+    add save listing button
+  else
+    add unsave listing button (same id, different data-saveorunsave)
+
+  {% if listing not in saved_listings %} 
+  <button id="listing-save-button" 
+    data-listing-id="{{listing.id}}"
+    type="button" class="btn btn-primary">Delete Listing</button>
+
 {% endif %}
 </div>
 <div class="error-message-container"></div>
@@ -52,10 +64,33 @@ Last updated: {{ listing.updated_at|date:"F j, Y" }}
 {% endif %}
 </form>
 <script>
-  const button = document.getElementById('listing-delete-button');
-  button.addEventListener('click', () => {
+  const deleteButton = document.getElementById('listing-delete-button');
+  deleteButton.addEventListener('click', () => {
     if (confirm('Are you sure you want to delete your listing?')) {
-      const listingId = button.dataset.listingId;
+      const listingId = deleteButton.dataset.listingId;
+      fetch(`/listing/${listingId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Got error while deleting listing.');
+        }
+        window.location.href = '/';
+      })
+      .catch(error => {
+        console.error("Caught error:", error);
+        const errorContainer = document.querySelector('.error-message-container');
+        errorContainer.innerHTML = error.message;
+      });
+    }
+  });
+  const saveListingButton = document.getElementById('save-listing-button');
+  saveListingButton.addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete your listing?')) {
+      const listingId = saveListingButton.dataset.listingId;
       fetch(`/listing/${listingId}`, {
         method: 'DELETE',
         headers: {
