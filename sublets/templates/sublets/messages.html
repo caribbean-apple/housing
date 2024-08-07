@@ -6,27 +6,28 @@ Sublets - Home
 {% endblock %}
 {% block body %}
 
-<div id="respond" >
-
-    <div style="width: 75%; margin:auto; border:2px solid black;">
-
-            <div class="child" style="border:2px solid red; width:100%;  display: inline-block;">   
-
-                From: <p id="From"></p>
-                To: <p id="To"></p>
-                Listing: <p id="Listing"></p>
-                Message: <p id="Message"></p>
-                Sent at: <p id="Sent_at"></p>
-
-                Response:<br> <textarea id="response_message" style="width:75%;"> </textarea> <br>
-
-
-
-            <button class="send_button" type="submit">Send Reply</button>
-
-        </div> 
+<div id="respond">
+    <div id="respond_message" >
 
     </div>
+
+    <div id="response_form">
+
+    <form action="{% url 'send_message' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" class="recipient_id" value="1">
+        <input type="hidden" class="listing_id" value="1">
+        {{ send_message_form.non_field_errors }}
+        {{ send_message_form.body.errors }}
+        <label for="{{ send_message_form.body.id_for_label }}">Reply to this message:</label><br>
+        {{ send_message_form.body }}
+        <br>
+        <button type="submit">Send</button>
+    </form>
+
+    </div>
+
+
 </div>
 
 
@@ -34,13 +35,13 @@ Sublets - Home
 
     {% for message in page_obj_in %} 
     
-    <div class="parent" style="width: 100%; margin:auto; border:2px solid green;">
+    <div class="parent" style="width: 100%; margin:auto; border:2px solid black;">
 
-        <div class="child" style="border:2px solid red; width:100%;  display: inline-block;">   
+        <div class="child" style=" width:100%;  display: inline-block;">   
 
             From: {{ message.sender.username }} <br>
             To: {{ message.recipient.username }} <br>
-            Listing: {{ message.listing.address_line_1 }} <br>
+            Listing: {{ message.listing}} <br>
             Message: {{ message.body }} <br>
             Sent_at: {{ message.sent_at}} <br>
             

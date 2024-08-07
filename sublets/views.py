@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_PUT
 import random
@@ -106,9 +106,14 @@ def send_message(request):
     # Get the form data from the request
     form = SendMessageForm(request.POST)
     # need sender, recipient, listing, body
+    print(form)
     if form.is_valid():
         form.process_and_save(sender=request.user)
         return redirect(f'listing/{listing.id}')
+    else:
+        print("something wrong with form")
+        print(request)
+        return HttpResponse("you did something wrong")
 
 
 def index(request):
@@ -222,14 +227,30 @@ def messages(request):
     page_obj_in=incoming_paginated_pages.get_page(page)
     page_obj_out=outgoing_paginated_pages.get_page(page)
 
-    print(outgoing_messages)
-    print(incoming_messages)
-
+    form = SendMessageForm()
 
 
     return render(request, "sublets/messages.html", {
         "page_obj_in": page_obj_in,
-        "page_obj_out": page_obj_out
+        "page_obj_out": page_obj_out,
+        "send_message_form": form
 
     })
+
+
+def message_fetch(request, message_id):
+
+    # Query for requested message
+
+    print(message_id)
+    message_to_return = Message.objects.get(pk=message_id)
+
+    print(message_to_return)
+    try:
+        message_to_return = Message.objects.get(pk=message_id)
+        
+        return JsonResponse(message_to_return.serialize())
+    except message_to_return.DoesNotExist:
+        return JsonResponse({"error": "message not found."}, status=404)
+        
     
