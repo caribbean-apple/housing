@@ -26,10 +26,6 @@ function load_messages() {
 
               respond(button.id)
 
-              
-
-          
-
             });
           });
 
@@ -37,29 +33,38 @@ function load_messages() {
 }
 
 function respond(id){
-  alert(id)
   document.querySelector('#respond').style.display = 'block';
+  document.querySelector('#show-messages').style.display = 'none';
 
   //TODO Get message information and populate the javascript
 
   individual_message_confirm=fetch('/message_info/'+id)      
     .then(response => response.json())
     .then(single_message => {
-                // Print emails
+
                 console.log(single_message);
                 document.querySelector('#respond').innerHTML = `
                 <hr>
                   ID: ${String(single_message.id)} <br>
                   Sender: ${single_message.sender} <br>
-                  Listing: ${single_message.listing.address_line_1}
                   Recipients: ${single_message.recipient} <br>
+                  Listing: ${single_message.listing}<br>
                   Body: ${single_message.body} <br>
                   Timestap: ${single_message.timestamp} <br>
                   <br>
                 <hr>
                 
                 Response:<br> <textarea id="response_message" style="width:75%;"> </textarea> <br></br>
+                <button class="send_button" type="submit">Send Reply</button>
                 `
+
+                document.querySelector('.send_button').addEventListener("click", function(){
+                  console.log('send_button pressed')
+                  })
+                  .then(response =>{ 
+                    console.log(response)
+                    load_mailbox('inbox')
+                  })
               
               
               })

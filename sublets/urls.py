@@ -23,6 +23,6 @@ urlpatterns = [
 
     # API Calls for Asyncronous calls for messages.
 
-    # path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
+    path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
     
 ]

@@ -92,3 +92,14 @@ class Message(models.Model):
         formatted_time = timezone.localtime(self.sent_at).strftime("%m.%d.%Y %H:%M")
         message_segment = self.body[:40] + '...' if len(self.body) > 40 else self.body
         return f'From {self.sender} to {self.recipient} ({formatted_time}): {self.body}'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "sender": self.sender.username,
+            "recipient": [self.recipient.username],
+            "body": self.body,
+            "listing": self.listing.address_line_1,
+            "listing_id": self.listing.id,
+            "timestamp": self.sent_at.strftime("%b %d %Y, %I:%M %p")
+        }

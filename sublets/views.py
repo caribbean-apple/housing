@@ -231,8 +231,12 @@ def message_fetch(request, message_id):
     # Query for requested message
 
     print(message_id)
+    message_to_return = Message.objects.get(pk=message_id)
+
+    print(message_to_return)
     try:
         message_to_return = Message.objects.get(pk=message_id)
+        
         return JsonResponse(message_to_return.serialize())
     except message_to_return.DoesNotExist:
         return JsonResponse({"error": "message not found."}, status=404)
