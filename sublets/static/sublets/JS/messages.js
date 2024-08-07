@@ -47,6 +47,18 @@ function respond(id){
     .then(single_message => {
                 // Print emails
                 console.log(single_message);
+                document.querySelector('#respond').innerHTML = `
+                <hr>
+                  ID: ${String(single_message.id)} <br>
+                  Sender: ${single_message.sender} <br>
+                  Recipients: ${single_message.recipient} <br>
+                  Body: ${single_message.body} <br>
+                  Timestap: ${single_message.timestamp} <br>
+                  <br>
+                <hr>
+                
+                Response:<br> <textarea id="response_message" style="width:75%;"> </textarea> <br></br>
+                `
               
               
               })
