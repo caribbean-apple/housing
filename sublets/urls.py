@@ -12,6 +12,7 @@ urlpatterns = [
     path("listing/<int:listing_id>/", views.listing, name="listing"),
     path("create/", views.create, name="create"),
     path("message/", views.messages, name="messages"),
+    path("saved-listings/", views.saved_listings, name="saved_listings"),
     path("send-message", views.send_message, name="send_message"),
     path("profile/<int:user_id>/", views.profile, name="profile"),
     path("profile-setup", views.profile_setup, name="profile_setup"),
@@ -22,6 +23,6 @@ urlpatterns = [
 
     # API Calls for Asyncronous calls for messages.
 
-    path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
+    # path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
     
 ]

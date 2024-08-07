@@ -11,7 +11,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     looking_for = models.TextField(blank=True)
     about_me = models.TextField(blank=True)
-
     def __str__(self):
         about_me_segment = self.about_me[:30] + '...' if len(self.about_me) > 30 else self.about_me
         return f"Profile: {self.user.username}. {about_me_segment}"

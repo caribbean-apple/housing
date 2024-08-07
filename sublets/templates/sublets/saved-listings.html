@@ -1,0 +1,15 @@
+{% extends 'sublets/layout.html' %}
+{% block title %}
+Sublets - Saved Listings
+{% endblock %}
+{% block body %}
+<ul>
+{% for listing in saved_listings %}
+    <li>
+        <a href="{% url 'listing' listing.id %}">
+            Listing at {{listing.address_line_1}}
+        </a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
