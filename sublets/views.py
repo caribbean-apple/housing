@@ -9,6 +9,18 @@ from .forms import UserRegistrationForm, LoginForm, ListingForm
 from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .models import User, Listing, ListingPicture, Message, ProfilePicture
 
+@login_required
+def saved_listings(request):
+    # I'm too lazy to add Pagination for now
+    user = request.user
+    listings = user.saved_listings.all()
+    context = {'saved_listings': listings}
+    return render(request, 'sublets/saved-listings.html', context)
+
+# def save_listing(request):
+#     # Handle the PUT request from JS
+#     if request.method == "PUT":
+
 # Create your views here.
 def profile_setup(request):
     profile_form = UserProfileForm(data=request.POST or None,
@@ -18,7 +30,6 @@ def profile_setup(request):
             user_id = profile_form.cleaned_data['user_id']
             profile_user = get_object_or_404(User, id=user_id)
             profile_form.process_and_save(profile_user=profile_user)
-            # breakpoint()
 
             for picture in request.FILES.getlist('pictures'):
                 ProfilePicture.objects.create(
@@ -28,6 +39,7 @@ def profile_setup(request):
             return redirect('profile', user_id=user_id)
     context = {'profile_form': profile_form}
     return render(request, 'sublets/profile-setup.html', context)
+
 
 def profile(request, user_id):
     profile_user = get_object_or_404(User, id=user_id)
@@ -41,6 +53,7 @@ def profile(request, user_id):
         context['profile'] = profile_user.profile
         context['profile_pictures'] = profile_user.profile_pictures.all()
     return render(request, 'sublets/profile.html', context)
+
 
 def listing(request, listing_id):
     form = SendMessageForm(request.POST or None)
@@ -79,6 +92,7 @@ def listing(request, listing_id):
         'send_message_form': form}
     return render(request, 'sublets/listing.html', context)
 
+
 @require_POST
 def send_message(request):
     # Get the form data from the request
@@ -87,6 +101,7 @@ def send_message(request):
     if form.is_valid():
         form.process_and_save(sender=request.user)
         return redirect(f'listing/{listing.id}')
+
 
 def index(request):
     search_form = SearchForm()
@@ -98,6 +113,7 @@ def index(request):
         pictures = ListingPicture.objects.filter(listing=featured_listing)
         context['pictures'] = pictures
     return render(request, 'sublets/index.html', context)
+
 
 def login_view(request):
     login_form = LoginForm(data=request.POST or None)
@@ -112,9 +128,11 @@ def login_view(request):
     context = {'login_form': login_form}
     return render(request, 'sublets/login.html', context)
 
+
 def logout_view(request):
     logout(request)
     return redirect('index')
+
 
 def register_view(request):
     registration_form = UserRegistrationForm(request.POST or None)
@@ -129,6 +147,7 @@ def register_view(request):
         'registration_form': registration_form
     }
     return render(request, 'sublets/register.html', context)
+
 
 def search_results(request):
     form = SearchForm(request.GET)
@@ -205,18 +224,4 @@ def messages(request):
         "page_obj_out": page_obj_out
 
     })
-
-
-def message_fetch(request, message_id):
-
-    # Query for requested message
-
-    print(message_id)
-    try:
-        message_to_return = Message.objects.get(pk=message_id)
-    except message_to_return.DoesNotExist:
-        return JsonResponse({"error": "message not found."}, status=404)
-
-
-    return JsonResponse({"Success": "message found."}, status=200)
     

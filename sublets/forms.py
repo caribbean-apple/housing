@@ -12,17 +12,32 @@ SUPPORTED_CITIES = [
     ('New York City', 'New York City'),
     ('Philadelphia', 'Philadelphia'),
 ]
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
 
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
 
 class UserProfileForm(forms.ModelForm):
     user_id = forms.IntegerField(widget=forms.HiddenInput())
-    pictures = forms.FileField(widget=forms.ClearableFileInput(
-        attrs={'multiple': True}), 
-        required=False,
-        validators=[
-            FileExtensionValidator(['jpg', 'jpeg', 'gif', 'png', 'webp']),
-            file_size_5mb
-        ])
+    pictures = MultipleFileField(label='Select files', required=False)
+    # pictures = forms.FileField(widget=forms.ClearableFileInput(
+    #     attrs={'allow_multiple_selected': True}), 
+    #     required=False,
+    #     validators=[
+    #         FileExtensionValidator(['jpg', 'jpeg', 'gif', 'png', 'webp']),
+    #         file_size_5mb
+    #     ])
     class Meta:
         model = UserProfile
         fields = ['looking_for', 'about_me']
@@ -68,8 +83,9 @@ class ListingForm(forms.ModelForm):
     # Form to enter a new listing to the database.
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    pictures = forms.FileField(widget=ClearableFileInput(
-        attrs={'multiple': True}), required=False)
+    pictures = MultipleFileField(label='Select files', required=False)
+    # pictures = forms.FileField(widget=ClearableFileInput(
+    #     attrs={'allow_multiple_selected': True}), required=False)
     class Meta:
         # This meta info class is used for ModelForms, whose fields are
         # defined based on what's in the corresponding model (listing model).
