@@ -178,8 +178,10 @@ def search_results(request):
     form = SearchForm(request.GET)
     if form.is_valid():
         selected_city=form.cleaned_data["selected_city"]
-        print("selected city", selected_city)
         relevant_pages=Listing.objects.filter(city=selected_city)
+        listing_ids = Listing.objects.values_list('id', flat=True)
+        relevant_pictures=ListingPicture.objects.filter(id__in = listing_ids)
+
 
         # Intialize page for pagination
         if request.GET.get('page'):
@@ -194,7 +196,8 @@ def search_results(request):
 
         return render(request, "sublets/search_results.html",{
                     "page_obj": page_obj,
-                    "selected_city": selected_city
+                    "selected_city": selected_city,
+                    "listing_pictures": relevant_pictures
                     })
 
     else: 

@@ -24,7 +24,18 @@ Sublets - Search Results
             <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary">See more</a>
             </p>
             </div> 
-        <div class="child" style="width:36%; border:2px solid blue; display: inline-block; "> PHOTO SPACE
+        <div class="child" style="width:49%; height:100%; border:2px solid blue; display: inline-block; ">
+
+            <div class="row">
+
+                {% for pic in listing_pictures %}
+                    <div class="col-4 col-md-3 mb-2">
+                    <div class="square-thumbnail" style="background-image: url('{{ pic.picture.url }}');"></div>
+                    </div>
+                {% empty %}
+                    <p>(Listing has no pictures)</p>
+                {% endfor %}
+            </div>
 
 
         </div>

@@ -48,8 +48,8 @@ Last updated: {{ listing.updated_at|date:"F j, Y" }}
 {% if user.is_authenticated and listing.created_by != user %}
 <form method="post">
   {% csrf_token %}
-  <input type="hidden" name="recipient_id" value={{ listing.created_by.id }}>
-  <input type="hidden" name="listing_id" value={{ listing.id }}>
+  <input type="hidden" name="recipient_id" value="{{ listing.created_by.id }}">
+  <input type="hidden" name="listing_id" value="{{ listing.id }}">
   {{ send_message_form.non_field_errors }}
   {{ send_message_form.body.errors }}
   <label for="{{ send_message_form.body.id_for_label }}">Send a message to the listing owner:</label><br>
