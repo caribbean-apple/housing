@@ -32,7 +32,8 @@ X If it is your listing, you can delete it.
 X Here you can create a listing. You must upload a photo, specify an address, and write a description. Rent can be specified here.
 
 #### Saved Listings Page
-O Accessible via the top nav menu if logged in. Shows saved listings, displayed the same way as in search results, with an option to delete the listing via clicking a trash can icon to the right of that listing.
+~ Accessible via the top nav menu if logged in. Shows saved listings, displayed the same way as in search results, with an option to delete the listing via clicking a trash can icon to the right of that listing.
+Comment: Done. But they don't display the same way as in search results. 
 
 O On the saved listings page, you can enter your email to be notified if any of your saved listings get edited or deleted. You will receive an actual email to that email address letting you know if so (assuming you put in a real email address)
 

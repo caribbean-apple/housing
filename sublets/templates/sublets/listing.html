@@ -4,29 +4,22 @@
 Sublets - Listing Detail
 {% endblock title %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'sublets/css/listing.css' %}">
-{% endblock head %}
 
 {% block body %}
 <div class="listing-page-header"><h1>Listing Detail</h1>
-{% if listing.created_by == user %}
-  <button id="listing-delete-button" 
-  data-listing-id="{{listing.id}}" 
-  type="button" class="btn btn-primary">Delete Listing</button>
-{% else %}
-
-  if listing not in saved listings
-    add save listing button
-  else
-    add unsave listing button (same id, different data-saveorunsave)
-
-  {% if listing not in saved_listings %} 
-  <button id="listing-save-button" 
+{% if user.is_authenticated %}
+  {% if listing.created_by == user %}
+    <button id="listing-delete-button"
     data-listing-id="{{listing.id}}"
     type="button" class="btn btn-primary">Delete Listing</button>
-
+  {% endif %}
 {% endif %}
+<button id="save-listing-button"
+  class="btn btn-primary"
+  style="display: none"
+  data-listing-id="{{listing.id}}"
+  data-saveorunsave-action=""
+  type="button" class="btn btn-primary"></button>
 </div>
 <div class="error-message-container"></div>
     
@@ -42,7 +35,8 @@ Sublets - Listing Detail
     {% endfor %}
   </div>
 </div>
-
+Listing by <a href="{% url 'profile' listing.created_by.id %}">
+  {{ listing.created_by.username }}</a><br>
 {{ listing.get_listing_type_display }}: ${{ listing.rent }} per month<br>
 {{ listing.bedroom_count }} bedroom{% if listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
 {{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
@@ -63,54 +57,78 @@ Last updated: {{ listing.updated_at|date:"F j, Y" }}
   <button type="submit">Send</button>
 {% endif %}
 </form>
-<script>
-  const deleteButton = document.getElementById('listing-delete-button');
-  deleteButton.addEventListener('click', () => {
-    if (confirm('Are you sure you want to delete your listing?')) {
-      const listingId = deleteButton.dataset.listingId;
-      fetch(`/listing/${listingId}`, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRFToken': '{{ csrf_token }}'
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Got error while deleting listing.');
-        }
-        window.location.href = '/';
-      })
-      .catch(error => {
-        console.error("Caught error:", error);
-        const errorContainer = document.querySelector('.error-message-container');
-        errorContainer.innerHTML = error.message;
-      });
-    }
-  });
-  const saveListingButton = document.getElementById('save-listing-button');
-  saveListingButton.addEventListener('click', () => {
-    if (confirm('Are you sure you want to delete your listing?')) {
-      const listingId = saveListingButton.dataset.listingId;
-      fetch(`/listing/${listingId}`, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRFToken': '{{ csrf_token }}'
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Got error while deleting listing.');
-        }
-        window.location.href = '/';
-      })
-      .catch(error => {
-        console.error("Caught error:", error);
-        const errorContainer = document.querySelector('.error-message-container');
-        errorContainer.innerHTML = error.message;
-      });
-    }
-  });
 
+
+<script>
+  // If user is authenticated, activate a save/unsave button.
+  const saveListingButton = document.getElementById('save-listing-button');
+  if ("{{ user.is_authenticated }}" === 'True') {
+    if ("{{ user_saved_listing }}" === 'True') {
+      saveListingButton.style.display = 'inline-block';
+      saveListingButton.dataset.saveorunsaveAction = 'unsave';
+      saveListingButton.innerHTML = 'Unsave Listing';
+    }
+    if ("{{ user_saved_listing }}" === 'False') {
+      saveListingButton.style.display = 'inline-block';
+      saveListingButton.dataset.saveorunsaveAction = 'save';
+      saveListingButton.innerHTML = 'Save Listing';
+    }
+  }
+
+  saveListingButton.addEventListener('click', () => {
+    const listingId = "{{ listing.id }}";
+    fetch('{% url "save_or_unsave_listing" %}', {
+      method: 'PUT',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        listingId: listingId,
+        saveorunsaveAction: saveListingButton.dataset.saveorunsaveAction
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Got error while saving/unsaving listing.');
+      }
+      location.reload(true);
+    })
+    .catch(error => {
+      console.error("Caught error:", error);
+      const errorContainer = document.querySelector('.error-message-container');
+      errorContainer.innerHTML = error.message;
+      alert("Unable to save listing. Please refresh and try again.");
+    });
+  });
+  
+  {% if listing.created_by == user %}
+    // Modify button to be save or unsave, depending on whether user has already saved
+    const deleteButton = document.getElementById('listing-delete-button');
+
+    deleteButton.addEventListener('click', () => {
+      if (confirm('Are you sure you want to delete your listing?')) {
+        const listingId = deleteButton.dataset.listingId;
+        fetch(`/listing/${listingId}`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Got error while deleting listing.');
+          }
+          window.location.href = '/';
+        })
+        .catch(error => {
+          console.error("Caught error:", error);
+          const errorContainer = document.querySelector('.error-message-container');
+          errorContainer.innerHTML = error.message;
+        });
+      }
+    });
+  {% endif %}
 </script>
 </div>
 {% endblock body %}

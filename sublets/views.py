@@ -1,9 +1,9 @@
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST, require_PUT
+from django.views.decorators.http import require_POST, require_http_methods
 import random
 import json
 from .forms import UserRegistrationForm, LoginForm, ListingForm
@@ -18,15 +18,28 @@ def saved_listings(request):
     context = {'saved_listings': listings}
     return render(request, 'sublets/saved-listings.html', context)
 
-@require_PUT
+@require_http_methods(["PUT"])
 @login_required
 def save_or_unsave_listing(request):
     # Handle the PUT request from JS
     data = json.loads(request.body)
-    save_or_unsave = data.get('save_or_unsave')
-    listing_id = data.get('listing_id')
+    listing_id = data.get('listingId')
+    save_or_unsave = data.get('saveorunsaveAction')
     user = request.user
-
+    if save_or_unsave == "save":
+        user.saved_listings.add(listing_id)
+        return JsonResponse(
+            {'message': 'Listing saved successfully.'},
+            status=200)
+    elif save_or_unsave == "unsave":
+        user.saved_listings.remove(listing_id)
+        return JsonResponse(
+            {'message': 'Listing unsaved successfully.'},
+            status=200)
+    else:
+        return JsonResponse(
+            {'error': f'Cannot perform action {save_or_unsave}'},
+              status=400)
 
  
 # Create your views here.
@@ -94,10 +107,14 @@ def listing(request, listing_id):
     
     listing_object = get_object_or_404(Listing, pk=listing_id)
     pictures = ListingPicture.objects.filter(listing=listing_object)
+    
     context = {
         'listing': listing_object,
         'pictures': pictures,
         'send_message_form': form}
+    if request.user.is_authenticated and listing_object.created_by != request.user:
+        context['user_saved_listing'] = request.user.saved_listings.filter(
+            id=listing_id).exists()
     return render(request, 'sublets/listing.html', context)
 
 
@@ -106,14 +123,9 @@ def send_message(request):
     # Get the form data from the request
     form = SendMessageForm(request.POST)
     # need sender, recipient, listing, body
-    print(form)
     if form.is_valid():
         form.process_and_save(sender=request.user)
         return redirect(f'listing/{listing.id}')
-    else:
-        print("something wrong with form")
-        print(request)
-        return HttpResponse("you did something wrong")
 
 
 def index(request):
@@ -227,30 +239,14 @@ def messages(request):
     page_obj_in=incoming_paginated_pages.get_page(page)
     page_obj_out=outgoing_paginated_pages.get_page(page)
 
-    form = SendMessageForm()
+    print(outgoing_messages)
+    print(incoming_messages)
+
 
 
     return render(request, "sublets/messages.html", {
         "page_obj_in": page_obj_in,
-        "page_obj_out": page_obj_out,
-        "send_message_form": form
+        "page_obj_out": page_obj_out
 
     })
-
-
-def message_fetch(request, message_id):
-
-    # Query for requested message
-
-    print(message_id)
-    message_to_return = Message.objects.get(pk=message_id)
-
-    print(message_to_return)
-    try:
-        message_to_return = Message.objects.get(pk=message_id)
-        
-        return JsonResponse(message_to_return.serialize())
-    except message_to_return.DoesNotExist:
-        return JsonResponse({"error": "message not found."}, status=404)
-        
     
