@@ -51,6 +51,7 @@ function respond(id){
                 <hr>
                   ID: ${String(single_message.id)} <br>
                   Sender: ${single_message.sender} <br>
+                  Listing: ${single_message.listing.address_line_1}
                   Recipients: ${single_message.recipient} <br>
                   Body: ${single_message.body} <br>
                   Timestap: ${single_message.timestamp} <br>
