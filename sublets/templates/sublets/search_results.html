@@ -4,6 +4,30 @@ Sublets - Search Results
 {% endblock %}
 {% block body %}
 
+Additional Filters: 
+<form action="{% url 'search' %}" method="post">
+
+    {% csrf_token %}
+
+    <label for="types">Choose a Accomodation tyle:</label>
+
+        <select name="types" id="accomodationType">
+            <option value="both">All Options</option>
+            <option value="entire_apartment">Entire Apartment</option>
+            <option value="room_in_apartment">Single Room</option>
+        </select><br>
+
+    <label for="start">Start date:</label>
+
+    <input type="hidden" name="selected_city" value="{{ selected_city }}">
+
+    <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" /> <br>
+
+    <button type="submit">Search</button>
+    
+
+</form><br>
+
 <div style="width: 75%; margin:auto; border:2px solid black;">
 
     {% for listing in page_obj %} 
@@ -19,7 +43,7 @@ Sublets - Search Results
             Rent: {{ listing.rent }} <br>
             Timeframe: {{ listing.start_date }} to {{ listing.end_date}}<br>
             Type: {{ listin.listing_type }}<br>
-            Description: {{ listing.description }}
+            Description: {{ listing.description }}<br>
             <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary">See more</a>
             </p>
             </div> 

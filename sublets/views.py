@@ -184,12 +184,9 @@ def search_results(request):
         # relevant_pictures=ListingPicture.objects.filter(id__in = listing_ids)
 
         queryset = ListingPicture.objects.none()
-        print(listing_ids)
 
         for x in listing_ids:
             queryset |=  ListingPicture.objects.filter(listing = Listing.objects.get(pk=x))[:2]
-            print(ListingPicture.objects.filter(id = x)[:3])
-            print(x)
 
 
         # Intialize page for pagination
@@ -208,6 +205,42 @@ def search_results(request):
                     "selected_city": selected_city,
                     "listing_pictures": queryset
                     })
+
+
+    if request.method == "POST":
+        selected_city=request.POST.get('selected_city')
+        type=request.POST.get('types')
+        date=request.POST.get('trip-start')    
+
+        if type == "both":
+            relevant_pages=Listing.objects.filter(city=selected_city, start_date__gte = date)
+        else:
+            relevant_pages=Listing.objects.filter(city=selected_city, start_date__gte = date, listing_type=type)
+
+        listing_ids = relevant_pages.values_list('id', flat=True)
+
+        queryset = ListingPicture.objects.none()
+
+        for x in listing_ids:
+            queryset |=  ListingPicture.objects.filter(listing = Listing.objects.get(pk=x))[:2]
+
+
+                # Intialize page for pagination
+        if request.GET.get('page'):
+            page=request.GET.get('page')
+        else:
+            page=1
+
+        paginated_pages=Paginator(relevant_pages, 2)
+        page_obj=paginated_pages.get_page(page)
+
+        #Render Page
+        return render(request, "sublets/search_results.html",{
+            "page_obj": page_obj,
+            "selected_city": selected_city,
+            "listing_pictures": queryset
+            })
+
 
     else: 
         print("Form is not valid")

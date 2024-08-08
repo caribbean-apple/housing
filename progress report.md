@@ -14,8 +14,8 @@ X Landing page has featured listing example. Clicking brings you to that listing
 X Here you register with a name, email, password.
 
 #### Search Results Page
-~ Displays results, one for each listing matching your city. Each result shows up to two photos from the listing. Clicking sends to the listing page.
-Comment: Don't have photos or link to listing page yet.
+x Displays results, one for each listing matching your city. Each result shows up to two photos from the listing. Clicking sends to the listing page.
+
 
 O More filters: The search results page has additional filters that you can specify on the left bar, including specifying 
 	- sublet start date (earliest date and latest date), 
