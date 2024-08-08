@@ -179,8 +179,17 @@ def search_results(request):
     if form.is_valid():
         selected_city=form.cleaned_data["selected_city"]
         relevant_pages=Listing.objects.filter(city=selected_city)
-        listing_ids = Listing.objects.values_list('id', flat=True)
-        relevant_pictures=ListingPicture.objects.filter(id__in = listing_ids)
+        listing_ids = relevant_pages.values_list('id', flat=True)
+
+        # relevant_pictures=ListingPicture.objects.filter(id__in = listing_ids)
+
+        queryset = ListingPicture.objects.none()
+        print(listing_ids)
+
+        for x in listing_ids:
+            queryset |=  ListingPicture.objects.filter(listing = Listing.objects.get(pk=x))[:2]
+            print(ListingPicture.objects.filter(id = x)[:3])
+            print(x)
 
 
         # Intialize page for pagination
@@ -197,7 +206,7 @@ def search_results(request):
         return render(request, "sublets/search_results.html",{
                     "page_obj": page_obj,
                     "selected_city": selected_city,
-                    "listing_pictures": relevant_pictures
+                    "listing_pictures": queryset
                     })
 
     else: 

@@ -20,18 +20,19 @@ Sublets - Search Results
             Timeframe: {{ listing.start_date }} to {{ listing.end_date}}<br>
             Type: {{ listin.listing_type }}<br>
             Description: {{ listing.description }}
-
             <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary">See more</a>
             </p>
             </div> 
-        <div class="child" style="width:49%; height:100%; border:2px solid blue; display: inline-block; ">
+        <div class="child" style="width:49%; border:2px solid blue; display: inline-block; ">
 
             <div class="row">
-
                 {% for pic in listing_pictures %}
-                    <div class="col-4 col-md-3 mb-2">
+
+                    {% if pic.listing.id == listing.id %}
+                    <div class="col-4 col-md-6 mb-2">
                     <div class="square-thumbnail" style="background-image: url('{{ pic.picture.url }}');"></div>
                     </div>
+                    {% endif %}
                 {% empty %}
                     <p>(Listing has no pictures)</p>
                 {% endfor %}
