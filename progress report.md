@@ -17,7 +17,7 @@ X Here you register with a name, email, password.
 x Displays results, one for each listing matching your city. Each result shows up to two photos from the listing. Clicking sends to the listing page.
 
 
-O More filters: The search results page has additional filters that you can specify on the left bar, including specifying 
+X More filters: The search results page has additional filters that you can specify on the left bar, including specifying 
 	- sublet start date (earliest date and latest date), 
 	- accommodation type: rent a room, rent an entire apartment
 
@@ -40,7 +40,7 @@ O On the saved listings page, you can enter your email to be notified if any of 
 #### Inbox Page
 X Accessible from anywhere for logged in users on the top nav bar.
 
-~ Lists messages you got from any user. Clicking opens that message
+X Lists messages you got from any user. Clicking opens that message
 Comment: No JS on this page yet, just a basic version.
 
 #### Message Read and Reply Page
