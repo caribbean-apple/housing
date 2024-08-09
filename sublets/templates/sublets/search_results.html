@@ -37,6 +37,8 @@ Additional Filters:
         <div class="child" style="border:2px solid red; width:50%;  display: inline-block;">   
             
             <p>
+            Listing by: <a href="{% url 'profile' listing.created_by.id %}">
+                {{ listing.created_by.username }} </a><br>
             Address: {{ listing.address_line_1 }} <br>
             City: {{ listing.city }} <br>
             Zip: {{ listing.zip_code }} <br>
