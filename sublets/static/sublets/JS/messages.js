@@ -44,7 +44,6 @@ function respond(id){
     .then(response => response.json())
     .then(single_message => {
 
-                console.log(single_message);
                 document.querySelector('#respond_message').innerHTML = `
                 <hr>
                   ID: ${String(single_message.id)} <br>
@@ -58,8 +57,8 @@ function respond(id){
 
                 `;
 
-                 document.querySelector('.recipient_id').value= single_message.sender_id;
-                 document.querySelector('.listing_id').value= single_message.listing_id;
+                 document.querySelector('.recipient_id').value = single_message.sender_id;
+                 document.querySelector('.listing_id').value = single_message.listing_id;
           
               
               })

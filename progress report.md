@@ -57,7 +57,7 @@ X Here you register with a name, email, password.
 x Displays results, one for each listing matching your city. Each result shows up to two photos from the listing. Clicking sends to the listing page.
 ~ Add clickable username to search results
 
-O More filters: The search results page has additional filters that you can specify on the left bar, including specifying 
+X More filters: The search results page has additional filters that you can specify on the left bar, including specifying 
 	- sublet start date (earliest date and latest date), 
 	- accommodation type: rent a room, rent an entire apartment
 
@@ -80,11 +80,11 @@ O On the saved listings page, you can enter your email to be notified if any of 
 #### Inbox Page
 X Accessible from anywhere for logged in users on the top nav bar.
 
-~ Lists messages you got from any user. Clicking opens that message
+X Lists messages you got from any user. Clicking opens that message
 Comment: No JS on this page yet, just a basic version.
 
 #### Message Read and Reply Page
-~ This is just a JS reload of the inbox page that lets you view the content any message you clicked, with the option to reply. The reply appears in the other user's inbox.
+X This is just a JS reload of the inbox page that lets you view the content any message you clicked, with the option to reply. The reply appears in the other user's inbox.
 
 #### User Profile Page
 ~ Throughout the site (including the search results page and listing pages), wherever you see a username you can click it, bringing you to that user's profile. If it is your own profile, an edit button appears that adds in the fields with JS for you to edit

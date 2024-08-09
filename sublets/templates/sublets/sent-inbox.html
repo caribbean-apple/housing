@@ -2,38 +2,14 @@
 {% load static %}
 
 {% block title %}
-Sublets - Home
+Sublets - Sent Inbox
 {% endblock %}
 {% block body %}
-
-<div id="respond">
-    <div id="respond_message" >
-
-    </div>
-
-    <div id="response_form">
-
-    <form action="{% url 'send_message' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" class="recipient_id" name= "recipient_id" value="">
-        <input type="hidden" class="listing_id" name="listing_id" value="">
-        {{ send_message_form.non_field_errors }}
-        {{ send_message_form.body.errors }}
-        <label for="{{ send_message_form.body.id_for_label }}">Reply to this message:</label><br>
-        {{ send_message_form.body }}
-        <br>
-        <button type="submit">Send</button>
-    </form>
-
-    </div>
-
-
-</div>
 
 
 <div id="show-messages" style="width: 75%; margin:auto; border:2px solid black;">
 
-    {% for message in page_obj_in %} 
+    {% for message in page_obj_out %} 
     
     <div class="parent" style="width: 100%; margin:auto; border:2px solid black;">
 
@@ -45,8 +21,6 @@ Sublets - Home
             Message: {{ message.body }} <br>
             Sent_at: {{ message.sent_at}} <br>
             
-
-            <button class="message_button" id="{{ message.id }}" type="submit">Reply</button>
 
         </div> 
 
@@ -79,8 +53,4 @@ Sublets - Home
 
 </div>
 
-{% endblock %}
-
-{% block script %}
-    <script type="text/javascript" src="{% static 'sublets/JS/messages.js' %}"></script>
 {% endblock %}
