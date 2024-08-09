@@ -44,7 +44,7 @@ X Lists messages you got from any user. Clicking opens that message
 Comment: No JS on this page yet, just a basic version.
 
 #### Message Read and Reply Page
-~ This is just a JS reload of the inbox page that lets you view the content any message you clicked, with the option to reply. The reply appears in the other user's inbox.
+X This is just a JS reload of the inbox page that lets you view the content any message you clicked, with the option to reply. The reply appears in the other user's inbox.
 
 #### User Profile Page
 ~ Throughout the site (including the search results page and listing pages), wherever you see a username you can click it, bringing you to that user's profile. If it is your own profile, an edit button appears that adds in the fields with JS for you to edit
