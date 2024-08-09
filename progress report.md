@@ -6,26 +6,11 @@ Those marked with ~ are in progress (with a comment below)
 === INCOMPLETE ONLY ===
 Separated out the complete stuff to leave only the incomplete.
 
-#### Search Results Page
-X Add clickable username to search results
-
-X More filters: The search results page has additional filters that you can specify on the left bar, including specifying 
-	- sublet start date (earliest date and latest date), 
-	- accommodation type: rent a room, rent an entire apartment
-Comment: Check on 2018 bug -- Bug fixed.
-
 #### Saved Listings Page
 
 O On the saved listings page, you can enter your email to be notified if any of your saved listings get edited or deleted. You will receive an actual email to that email address letting you know if so (assuming you put in a real email address)
 
-#### Message Read and Reply Page
-X Implement view message and reply for this page
-
 #### Additional Features / Tasks
-O Incorporate at least one CSS animation
-
-~ Incorporates a tests.py file with at least two tests. One must use selenium.
-Comment: Non-selenium test is done. Waiting for us to have more interactivity/JS before making a selenium test.
 
 O Any single-page app features (like in the inbox) still have browser history and back button support
 

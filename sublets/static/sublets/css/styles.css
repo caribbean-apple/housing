@@ -10,7 +10,7 @@ body {
 }
 
 .verticalspace {
-    height: 150px;
+    height: 60px;
 }
 
 #city-selector {
@@ -33,3 +33,18 @@ body {
     width: 70%;
     max-width: 600px;
 }
+
+@keyframes fade-in {  
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity:1;
+    }
+}
+.fade-in {
+    animation: fade-in 1s ease-in;
+    /* animation-duration: 2s; //take 2s to interpolate between frames
+    animation-fill-mode: forwards; // normal fwds interpolation
+    animation-play-state: paused; // start paused, then activate later. */
+  }

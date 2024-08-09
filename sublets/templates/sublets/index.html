@@ -14,26 +14,28 @@ Sublets - Home
 <div class="verticalspace"></div>
 {% if featured_listing %}
 <h4>Featured listing:</h4>
-<div class="container-fluid">
-    <div class="row">
-        {% for pic in pictures %}
-        <div class="col-4 col-md-3 mb-2">
-            <div class="square-thumbnail" style="background-image: url('{{ pic.picture.url }}');"></div>
+<div class="content-container fade-in">
+    <div class="container-fluid">
+        <div class="row">
+            {% for pic in pictures %}
+            <div class="col-4 col-md-3 mb-2">
+                <div class="square-thumbnail" style="background-image: url('{{ pic.picture.url }}');"></div>
+            </div>
+            {% empty %}
+            <p>(Listing has no images)</p>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p>(Listing has no images)</p>
-        {% endfor %}
     </div>
+    Listing by <a href="{% url 'profile' featured_listing.created_by.id %}">
+        {{ featured_listing.created_by.username }}</a><br>
+    {{ featured_listing.get_listing_type_display }}: ${{ featured_listing.rent }} per month<br>
+    {{ featured_listing.bedroom_count }} bedroom{% if featured_listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
+    {{ featured_listing.bathroom_count }} bathroom{% if featured_listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
+    <strong>Address:</strong><br>
+    <a href="{% url 'listing' featured_listing.id %}">{{ featured_listing.address_line_1 }}</a><br> 
+    {{ featured_listing.city }}, {{ featured_listing.state }} {{ featured_listing.zip_code }}<br><br>
+    Available: {{ featured_listing.start_date|date:"F j" }} to {{ featured_listing.end_date|date:"F j, Y" }}<br>
+    Last updated: {{ featured_listing.updated_at|date:"F j, Y" }}
+    {% endif %}
 </div>
-Listing by <a href="{% url 'profile' featured_listing.created_by.id %}">
-    {{ featured_listing.created_by.username }}</a><br>
-{{ featured_listing.get_listing_type_display }}: ${{ featured_listing.rent }} per month<br>
-{{ featured_listing.bedroom_count }} bedroom{% if featured_listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
-{{ featured_listing.bathroom_count }} bathroom{% if featured_listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
-<strong>Address:</strong><br>
-<a href="{% url 'listing' featured_listing.id %}">{{ featured_listing.address_line_1 }}</a><br> 
-{{ featured_listing.city }}, {{ featured_listing.state }} {{ featured_listing.zip_code }}<br><br>
-Available: {{ featured_listing.start_date|date:"F j" }} to {{ featured_listing.end_date|date:"F j, Y" }}<br>
-Last updated: {{ featured_listing.updated_at|date:"F j, Y" }}
-{% endif %}
 {% endblock %}
