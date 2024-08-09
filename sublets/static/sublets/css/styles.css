@@ -2,7 +2,7 @@
 
 body {
     /* temporary background color to reduce screen glare */
-    background-color:rgb(128, 128, 128) 
+    background-color:rgb(229, 229, 229) 
 }
 
 .error-message-container {
@@ -47,4 +47,13 @@ body {
     /* animation-duration: 2s; //take 2s to interpolate between frames
     animation-fill-mode: forwards; // normal fwds interpolation
     animation-play-state: paused; // start paused, then activate later. */
+  }
+
+  #additional-filter-area {
+    display: flex;
+    gap: 10px;
+  }
+
+  .slim-btn {
+    height: 30px;
   }

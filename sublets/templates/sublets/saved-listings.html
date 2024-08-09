@@ -3,19 +3,19 @@
 Sublets - Saved Listings
 {% endblock %}
 {% block body %}
-<ul>
 
+<p>Enter your email here to be notified if this listing is removed:</p>
     {{ message }}
     <form action="{% url 'saved_listings' %}" method="post" style="margin:auto;">
         {% csrf_token %}
 
         <input type="Text" name="email" placeholder="Enter contact email here"></input>
 
-        <button type="submit">Send</button>
+        <button type="submit">Submit</button>
     </form>
     <br>
 
-
+<ul>
 {% for listing in saved_listings %}
 
 

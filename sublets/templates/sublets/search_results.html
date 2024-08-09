@@ -6,35 +6,37 @@ Sublets - Search Results
 
 Additional Filters: 
 <form action="{% url 'search' %}" method="post">
-
     {% csrf_token %}
-
-    <label for="types">Choose an accomodation type:</label>
-
-        <select name="types" id="accomodationType">
-            <option value="both">All Options</option>
-            <option value="entire_apartment">Entire Apartment</option>
-            <option value="room_in_apartment">Single Room</option>
-        </select><br>
-
-    <label for="start">Start date:</label>
-
-    <input type="hidden" name="selected_city" value="{{ selected_city }}">
-
-    <input type="date" id="start" name="trip-start" value="2024-08-08" min="2024-01-01" max="2032-12-31" /> <br>
-
-    <button type="submit">Search</button>
+    <div id="additional-filter-area">
+        <div class="additional-filter-element">
+            <label for="types">Choose an accomodation type:</label>
+            <select name="types" id="accomodationType">
+                <option value="both">All Options</option>
+                <option value="entire_apartment">Entire Apartment</option>
+                <option value="room_in_apartment">Single Room</option>
+            </select><br>
+        </div>
+        <div class="additional-filter-element">
+            <label for="start">Earliest move-in: </label>
+            <input type="date" id="start" name="trip-start" value="2024-08-08" min="2024-01-01" max="2032-12-31" /> <br>
+        </div>
+        <div class="additional-filter-element">
+            <input type="hidden" name="selected_city" value="{{ selected_city }}">
+            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        </div>
     
+    </div>
 
+    
 </form><br>
 
 <div style="width: 75%; margin:auto; border:2px solid black;">
 
     {% for listing in page_obj %} 
     
-    <div class="parent" style="width: 75%; margin:auto; border:2px solid green;">
+    <div class="parent" style="width: 100%; margin:auto; border:2px solid rgb(212,212,212);">
 
-        <div class="child" style="border:2px solid red; width:50%;  display: inline-block;">   
+        <div class="child" style="width:50%;  display: inline-block;">   
             
             <p>
             Listing by: <a href="{% url 'profile' listing.created_by.id %}">
@@ -46,10 +48,10 @@ Additional Filters:
             Timeframe: {{ listing.start_date }} to {{ listing.end_date}}<br>
             Type: {{ listin.listing_type }}<br>
             Description: {{ listing.description }}<br>
-            <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary">See more</a>
+            <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary btn-sm">See more</a>
             </p>
             </div> 
-        <div class="child" style="width:49%; border:2px solid blue; display: inline-block; ">
+        <div class="child" style="width:49%; display: inline-block; ">
 
             <div class="row">
                 {% for pic in listing_pictures %}
@@ -88,12 +90,12 @@ Additional Filters:
             </span>
     
             {% if page_obj.has_next %}
-                <a href="?selected_city={{ selected_city }}&page={{ page_obj.next_page_number }}">next</a>
-                <a href="?selected_city={{ selected_city }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <a href="?selected_city={{ selected_city }}&page={{ page_obj.next_page_number }}" class="btn btn-primary">next</a>
+                <a href="?selected_city={{ selected_city }}&page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">last &raquo;</a>
             {% endif %}
         </span>
     </div>
 
 </div>
-
+<div class="verticalspace"></div>
 {% endblock %}
