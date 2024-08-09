@@ -16,19 +16,11 @@ Sublets - Profile
         {% endfor %}
         </div>
     </div>
-    About me:
-    {% if profile_user == user %}
-    <button id="edit-about-me-button" class="btn btn-primary" type="button" >Edit</button>
-    <br>
-    {% endif %}
+    About me:<br>
     {{ profile.about_me }}<br>
     <br>
 
-    I'm looking for:
-    {% if profile_user == user %}
-    <button id="edit-looking-for-button" class="btn btn-primary" type="button" >Edit</button>
-    {% endif %}
-    <br>
+    I'm looking for:<br>
     {{ profile.looking_for }}<br>
 {% else %}
     {% if profile_user == user %}

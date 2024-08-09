@@ -2,3 +2,4 @@
 # Other versions (especially newer ones) may work as well.
 Django==4.1
 Pillow==9.4.0
+Selenium==4.23.1

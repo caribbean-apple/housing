@@ -1,15 +1,33 @@
 from django.test import TestCase
-from sublets.models import User, UserProfile, Listing
+from sublets.models import User, Listing, Message
 from django.shortcuts import reverse
+from selenium import webdriver
 
 class TestSimplePagesWithLogin(TestCase):
     def setUp(self):
         # TestCase has user as an attribute
-        self.user = User.objects.create_user(username='test_user', password='t3$+123')
+        self.user = User.objects.create_user(username='test', password='t3$+123')
         # TestCase also has client as an attribute, so although we
         # made a Client() in class, this is not necessary and apparently
         # not as recommended as using TestCase.client.
-        self.client.login(username='test_user', password='t3$+123')
+        self.client.login(username='test', password='t3$+123')
+
+        self.listing = Listing.objects.create(
+            created_by=self.user,
+            description="Test description",
+            address_line_1="Test address",
+            city="Boston Area",
+            state="MA",
+            zip_code="02108",
+            rent=1000,
+            listing_type="room_in_apartment",
+            start_date="2024-09-01",
+            end_date="2025-05-31",
+            bedroom_count=1,
+            bathroom_count="1"
+        )
+
+        
 
     def test_simple_page_loads(self):
         # Only includes pages that don't require kwargs (e.g. ?city=Philadelphia)
