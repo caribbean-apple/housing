@@ -28,6 +28,6 @@ urlpatterns = [
     # Felix: I am getting an error from this:
     # AttributeError: module 'sublets.views' has no attribute 'message_fetch'
     # So I have commented it out.
-    # path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
+    path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
     
 ]

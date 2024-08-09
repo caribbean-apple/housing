@@ -284,9 +284,6 @@ def messages(request):
     page_obj_in=incoming_paginated_pages.get_page(page)
     page_obj_out=outgoing_paginated_pages.get_page(page)
 
-    print(outgoing_messages)
-    print(incoming_messages)
-
 
 
     return render(request, "sublets/messages.html", {
@@ -295,3 +292,19 @@ def messages(request):
 
     })
     
+
+def message_fetch(request, message_id):
+
+    # Query for requested message
+
+    print(message_id)
+    message_to_return = Message.objects.get(pk=message_id)
+
+    print(message_to_return)
+    try:
+        message_to_return = Message.objects.get(pk=message_id)
+        
+        return JsonResponse(message_to_return.serialize())
+    except message_to_return.DoesNotExist:
+        return JsonResponse({"error": "message not found."}, status=404)
+        
