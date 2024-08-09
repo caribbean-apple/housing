@@ -122,19 +122,18 @@ def listing(request, listing_id):
 def send_message(request):
     # Get the form data from the request
     form = SendMessageForm(request.POST)
-    listing_id=request.POST.get('listing_id')
 
     # need sender, recipient, listing, body
     if form.is_valid():
         form.process_and_save(sender=request.user)
-        return redirect(f'listing/{listing_id}')
+        return redirect('sent_inbox')
     elif request.POST.get('recipient_id'):
         new_message=SendMessageForm(recipient_id=request.POST.get('recipient_id'),
                                     listing_id=request.POST.get('listing_id'),
                                     body=request.POST.get('body')
                                     )
         new_message.process_and_save(sender=request.user)
-        return redirect(f'listing/{listing_id}')
+        return redirect('sent_inbox')
     else:
         print("Something wrong with form")
         print(request)
@@ -283,8 +282,7 @@ def messages(request):
     user=User.objects.get(username=request.user)
     message_form=SendMessageForm()
 
-    outgoing_messages=Message.objects.filter(sender=user)
-    incoming_messages=Message.objects.filter(recipient=user)
+    incoming_messages=Message.objects.filter(recipient=user).order_by('sent_at').reverse()
 
     # Intialize page for pagination
     if request.GET.get('page'):
@@ -293,16 +291,13 @@ def messages(request):
         page=1
 
     incoming_paginated_pages=Paginator(incoming_messages, 10)
-    outgoing_paginated_pages=Paginator(outgoing_messages, 10)
     
     page_obj_in=incoming_paginated_pages.get_page(page)
-    page_obj_out=outgoing_paginated_pages.get_page(page)
 
 
 
     return render(request, "sublets/messages.html", {
         "page_obj_in": page_obj_in,
-        "page_obj_out": page_obj_out,
         "send_message_form": message_form
 
     })
@@ -322,4 +317,28 @@ def message_fetch(request, message_id):
         return JsonResponse(message_to_return.serialize())
     except message_to_return.DoesNotExist:
         return JsonResponse({"error": "message not found."}, status=404)
+    
+@login_required
+def sent_inbox(request):
+    user=User.objects.get(username=request.user)
+    outgoing_messages=Message.objects.filter(sender=user).order_by('sent_at').reverse()
+
+    # Intialize page for pagination
+    if request.GET.get('page'):
+        page=request.GET.get('page')
+    else:
+        page=1
+
+    outgoing_paginated_pages=Paginator(outgoing_messages, 10)
+
+    page_obj_out=outgoing_paginated_pages.get_page(page)
+
+
+
+    return render(request, "sublets/sent-inbox.html", {
+        "page_obj_out": page_obj_out
+
+    })
+
+    return HttpResponse("Reached Sent Inbox")
         

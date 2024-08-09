@@ -1,0 +1,56 @@
+{% extends 'sublets/layout.html' %}
+{% load static %}
+
+{% block title %}
+Sublets - Sent Inbox
+{% endblock %}
+{% block body %}
+
+
+<div id="show-messages" style="width: 75%; margin:auto; border:2px solid black;">
+
+    {% for message in page_obj_out %} 
+    
+    <div class="parent" style="width: 100%; margin:auto; border:2px solid black;">
+
+        <div class="child" style=" width:100%;  display: inline-block;">   
+
+            From: {{ message.sender.username }} <br>
+            To: {{ message.recipient.username }} <br>
+            Listing: {{ message.listing}} <br>
+            Message: {{ message.body }} <br>
+            Sent_at: {{ message.sent_at}} <br>
+            
+
+        </div> 
+
+    </div>    
+
+
+    {% empty %}
+        
+        No Messages
+
+    {% endfor %}
+
+    <div class="pagination" style="margin : auto; text-align: center;">
+        <span class="step-links"  style="margin : auto;">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?&page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+</div>
+
+{% endblock %}

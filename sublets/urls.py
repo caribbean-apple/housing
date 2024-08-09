@@ -16,6 +16,7 @@ urlpatterns = [
     path("send-message", views.send_message, name="send_message"),
     path("profile/<int:user_id>/", views.profile, name="profile"),
     path("profile-setup", views.profile_setup, name="profile_setup"),
+    path("sent-inbox", views.sent_inbox, name="sent_inbox"),
     path("save-or-unsave-listing", views.save_or_unsave_listing, 
          name="save_or_unsave_listing"),
     # Add robots.txt to prevent scraping
