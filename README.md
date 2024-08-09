@@ -3,25 +3,29 @@ Title: Sublease Listing and Finding Website
 Authors: Felix Feist and Tadhg Scannell
 Semesster: Summer 2024
 
-Project Description:
+Project Description: This repo hosts all the code for a sublease housing application.  Users can create profiles, log-in, list and search for housing in different predetermined areas, and message the listing owner.  This project executes this functionality using a combination of Javascript, Python, SQL, and HTML, all managed via a Djagno App.
 
 Requirements: See the requirements.txt file 
 
 File Breakdown and Description
 
-    Models: THe file that stores all the database models for usage.
 
-    Forms
 
-    Urls:
+In Sublets:
 
-    Tests:
+    Models: The file contains all the database models for usage.  This includes Users and their profiles, listings, photos for the listings, and messages between users.
 
-    Views:
+    Forms: This file contains the forms used in the HTML and views.py funcitonality to pull requests from the webpages and store them in the models.
 
-    Static:
+    Urls: This file contains the url pathing between the different available webpages for the application.
 
-    Templates:
+    Tests:This fil containst 
+
+    Views: This file is where the majority of the backend code runs to display the webpage as different input are provided to the user.
+
+    Static: This is the folder that contains all necessary static files, including the CSS and Javscript necessary to run the single page sub-applications.
+
+    Templates: This is the folder holding all of the different templates available for viewing.  The Layout is the base template to provide consistency across the web app, which gets extended into the other options depending on the necessary view.
 
 
 Major Design Decisions:
