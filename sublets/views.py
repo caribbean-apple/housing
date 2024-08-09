@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_http_methods
 import random
@@ -122,10 +122,23 @@ def listing(request, listing_id):
 def send_message(request):
     # Get the form data from the request
     form = SendMessageForm(request.POST)
+    listing_id=request.POST.get('listing_id')
+
     # need sender, recipient, listing, body
     if form.is_valid():
         form.process_and_save(sender=request.user)
-        return redirect(f'listing/{listing.id}')
+        return redirect(f'listing/{listing_id}')
+    elif request.POST.get('recipient_id'):
+        new_message=SendMessageForm(recipient_id=request.POST.get('recipient_id'),
+                                    listing_id=request.POST.get('listing_id'),
+                                    body=request.POST.get('body')
+                                    )
+        new_message.process_and_save(sender=request.user)
+        return redirect(f'listing/{listing_id}')
+    else:
+        print("Something wrong with form")
+        print(request)
+        return HttpResponse("Message Failed to send.")
 
 
 def index(request):
@@ -268,6 +281,7 @@ def create(request):
 def messages(request):
 
     user=User.objects.get(username=request.user)
+    message_form=SendMessageForm()
 
     outgoing_messages=Message.objects.filter(sender=user)
     incoming_messages=Message.objects.filter(recipient=user)
@@ -288,7 +302,8 @@ def messages(request):
 
     return render(request, "sublets/messages.html", {
         "page_obj_in": page_obj_in,
-        "page_obj_out": page_obj_out
+        "page_obj_out": page_obj_out,
+        "send_message_form": message_form
 
     })
     

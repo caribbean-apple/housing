@@ -15,8 +15,8 @@ Sublets - Home
 
     <form action="{% url 'send_message' %}" method="post">
         {% csrf_token %}
-        <input type="hidden" class="recipient_id" value="1">
-        <input type="hidden" class="listing_id" value="1">
+        <input type="hidden" class="recipient_id" name= "recipient_id" value="">
+        <input type="hidden" class="listing_id" name="listing_id" value="">
         {{ send_message_form.non_field_errors }}
         {{ send_message_form.body.errors }}
         <label for="{{ send_message_form.body.id_for_label }}">Reply to this message:</label><br>
