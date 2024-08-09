@@ -14,12 +14,6 @@ Sublets - Listing Detail
     type="button" class="btn btn-primary">Delete Listing</button>
   {% endif %}
 {% endif %}
-<button id="save-listing-button"
-  class="btn btn-primary"
-  style="display: none"
-  data-listing-id="{{listing.id}}"
-  data-saveorunsave-action=""
-  type="button" class="btn btn-primary"></button>
 </div>
 <div class="error-message-container"></div>
     
@@ -35,11 +29,21 @@ Sublets - Listing Detail
     {% endfor %}
   </div>
 </div>
+<button id="save-listing-button"
+  class="btn btn-primary"
+  style="display: none"
+  data-listing-id="{{listing.id}}"
+  data-saveorunsave-action=""
+  type="button" class="btn btn-primary"></button>
 Listing by <a href="{% url 'profile' listing.created_by.id %}">
   {{ listing.created_by.username }}</a><br>
 {{ listing.get_listing_type_display }}: ${{ listing.rent }} per month<br>
 {{ listing.bedroom_count }} bedroom{% if listing.bedroom_count|add:0 > 1 %}s{% endif %}, 
-{{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br><br>
+{{ listing.bathroom_count }} bathroom{% if listing.bathroom_count|add:0 > 1 %}s{% endif %} <br>
+<br>
+<strong>Description:</strong><br>
+{{ listing.description }}<br>
+<br>
 <strong>Address:</strong><br>
 {{ listing.address_line_1 }}<br> {{ listing.city }}, {{ listing.state }} {{ listing.zip_code }}<br><br>
 Available: {{ listing.start_date|date:"F j" }} to {{ listing.end_date|date:"F j, Y" }}<br>

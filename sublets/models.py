@@ -19,10 +19,12 @@ class UserProfile(models.Model):
         about_me_segment = self.about_me[:30] + '...' if len(self.about_me) > 30 else self.about_me
         return f"Profile: {self.user.username}. {about_me_segment}"
     
-
+# TODO: change this to link to userProfile instead of user. 
+# (Not in scope for the class project)
 class ProfilePicture(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="profile_pictures")
+    
     picture = models.ImageField(upload_to='profile_pictures/')
 
 

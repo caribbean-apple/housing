@@ -69,13 +69,15 @@ def save_or_unsave_listing(request):
     recipient_list=["scannellstp@gmail.com","sscanne2@alumni.nd.edu"]
 
     body="You saved the listing"+ str(listing.address_line_1)
-    send_mail(
-        "You saved a listing",
-        body,
-        recipient_list,
-        email_from,
-        fail_silently=False,
-    )
+    # Felix: This currently makes an error, commenting out for now 
+    # to make saving functional for the video
+    # send_mail(
+    #     "You saved a listing",
+    #     body,
+    #     recipient_list,
+    #     email_from,
+    #     fail_silently=False,
+    # )
 
     # Execute requests against save or unsave.  If neither option, return non valid selection.
     if save_or_unsave == "save":

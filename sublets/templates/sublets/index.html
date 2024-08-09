@@ -6,7 +6,8 @@ Sublets - Home
 <h1>Sublet Search</h1>
 <form action="{% url 'search' %}" method="get">
 
-    {{ search_form }}
+    {{ search_form.selected_city }}
+    {{ search_form.selected_city.errors }}
 
     <button type="submit">Search</button>
 
