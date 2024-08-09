@@ -9,7 +9,7 @@ Requirements: See the requirements.txt file
 
 File Breakdown and Description
 
-    Models
+    Models: THe file that stores all the database models for usage.
 
     Forms
 
@@ -35,7 +35,7 @@ Runing list of things to work on
     No photos in listing only showed if no photos in any listing. need to address.
 
 
-Challenges Experienced:
+Challenges Experienced and Design Decisions:
 
     Clean_data: During the validation of our add listing form, we encountered an issue where the comparison between the start date and end date was returning a comparison error.  
         What we Learned: if you use clean_x_date, it will not let the user access other aspects of the form to evaluate.  Thses need to be combined into one clean function.
@@ -55,3 +55,5 @@ Challenges Experienced:
     Date Time:  Tadhg referenced a input from GeeksForGeeks to figure out the date for the input on the advanced search filter.  This caused some initial issues, as the code had an initial limit on the date time.  After debugging, this was a quick resolution.
 
     Version Control: Through multiple sessions of editing, a Fetch_Message function API that was built got deleted in version control.  This led to functional issues where one party was trying to run code but encountered errors with a url.py call to a none existent function.  This was a good exercise in iterating back through the past versions to find deleted code.
+
+    Emails work: Attempted to get the emails working using the inhouse send_mail function in python.  This ended up cuasing the code disruption as mentioned by Glenn in his direction.  We then worked through the Celery documentation to try and get this running before realizing that we were not a server and as such the python function would not work.  So then we attempted to go through the Google API, including setting up an google cloud with a project email address that we built "housingCS33@gmail.com".  We worked through the documenation to build out the quick start guide to get it working.  The first problem was determining the webpage redirect that needed to be sent, which was http://localhost:44331/.  This ended up giving me an access blocked, so we added it to the google cloud.  I treid authorising the local host to be a valid origin, but that was not functioning for us.

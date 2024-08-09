@@ -11,6 +11,7 @@ from .forms import UserRegistrationForm, LoginForm, ListingForm
 from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .models import User, Listing, ListingPicture, Message, ProfilePicture
 from django.core.mail import send_mail
+from sublets.tasks import send_email_func
 
 # Function for a user to see their saved lisitings
 
@@ -64,18 +65,6 @@ def save_or_unsave_listing(request):
     listing = Listing.objects.get(pk=listing_id)
     save_or_unsave = data.get('saveorunsaveAction')
     user = request.user
-
-    email_from=settings.EMAIL_HOST_USER
-    recipient_list=["scannellstp@gmail.com","sscanne2@alumni.nd.edu"]
-
-    body="You saved the listing"+ str(listing.address_line_1)
-    send_mail(
-        "You saved a listing",
-        body,
-        recipient_list,
-        email_from,
-        fail_silently=False,
-    )
 
     # Execute requests against save or unsave.  If neither option, return non valid selection.
     if save_or_unsave == "save":
@@ -383,10 +372,8 @@ def message_fetch(request, message_id):
 
     # Query for requested message
 
-    print(message_id)
     message_to_return = Message.objects.get(pk=message_id)
 
-    print(message_to_return)
     try:
         message_to_return = Message.objects.get(pk=message_id)
         
