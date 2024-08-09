@@ -21,8 +21,8 @@ urlpatterns = [
          name="save_or_unsave_listing"),
     # Add robots.txt to prevent scraping
     path("robots.txt",
-        TemplateView.as_view(template_name="robots.txt", 
-                             content_type="text/plain"), name="robots"),
+         TemplateView.as_view(template_name="robots.txt", 
+                              content_type="text/plain"), name="robots"),
 
 
     # API Calls for Asyncronous calls for messages.
