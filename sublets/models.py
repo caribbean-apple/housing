@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 # Create your models here.
+
+
 class User(AbstractUser):
     saved_listings = models.ManyToManyField("Listing", related_name="users_who_saved")
 
@@ -11,6 +13,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     looking_for = models.TextField(blank=True)
     about_me = models.TextField(blank=True)
+
     def __str__(self):
         about_me_segment = self.about_me[:30] + '...' if len(self.about_me) > 30 else self.about_me
         return f"Profile: {self.user.username}. {about_me_segment}"
@@ -36,12 +39,12 @@ class Listing(models.Model):
     # Using this to limit bathroom options.  This can be expanded to include as many options, but it was determined to be an easier solution than trying to 
     # Do backend logic to limit to increments of .5.
     BATHROOM_OPTIONS = [
-        ('1', 'One') ,
+        ('1', 'One'),
         ('1.5', 'One and a half'),
         ('2',  'Two'),
         ('2.5', 'Two and a half'),
         ('3', 'Three'), 
-        ('3.5','Three and a half'), 
+        ('3.5', 'Three and a half'), 
         ('4', 'Four')
     ]
     
@@ -49,17 +52,18 @@ class Listing(models.Model):
     description = models.TextField()
     # UPS max = 30char, FedEx max = 35char, USPS max = 46char
     address_line_1 = models.CharField(max_length=35)
-    city = models.CharField(max_length=28, choices=SUPPORTED_CITIES) # 28 according to USPS
-    state = models.CharField(max_length=14) # South Carolina is longest
+    city = models.CharField(max_length=28, choices=SUPPORTED_CITIES)  # 28 according to USPS
+    state = models.CharField(max_length=14)  # South Carolina is longest
     zip_code = models.CharField(max_length=5)
     rent = models.DecimalField(max_digits=7, decimal_places=2)
     listing_type = models.CharField(max_length=20, choices=LISTING_TYPES)
     start_date = models.DateField()
     end_date = models.DateField()
-    bedroom_count=models.IntegerField()
-    bathroom_count=models.CharField(max_length=14, choices=BATHROOM_OPTIONS)
+    bedroom_count = models.IntegerField()
+    bathroom_count = models.CharField(max_length=14, choices=BATHROOM_OPTIONS)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f'{self.city} - listing by {self.created_by} at {self.zip_code}'
 
@@ -88,6 +92,7 @@ class Message(models.Model):
     body = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
     def __str__(self):
         formatted_time = timezone.localtime(self.sent_at).strftime("%m.%d.%Y %H:%M")
         message_segment = self.body[:40] + '...' if len(self.body) > 40 else self.body

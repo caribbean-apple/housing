@@ -12,8 +12,11 @@ SUPPORTED_CITIES = [
     ('New York City', 'New York City'),
     ('Philadelphia', 'Philadelphia'),
 ]
+
+
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
+    
 
 class MultipleFileField(forms.FileField):
     def __init__(self, *args, **kwargs):
@@ -28,6 +31,7 @@ class MultipleFileField(forms.FileField):
             result = single_file_clean(data, initial)
         return result
 
+
 class UserProfileForm(forms.ModelForm):
     user_id = forms.IntegerField(widget=forms.HiddenInput())
     pictures = MultipleFileField(label='Select files', required=False)
@@ -38,6 +42,7 @@ class UserProfileForm(forms.ModelForm):
     #         FileExtensionValidator(['jpg', 'jpeg', 'gif', 'png', 'webp']),
     #         file_size_5mb
     #     ])
+
     class Meta:
         model = UserProfile
         fields = ['looking_for', 'about_me']
@@ -56,6 +61,7 @@ class UserProfileForm(forms.ModelForm):
         if commit:
             profile.save()
         return profile
+    
 
 class UserRegistrationForm(UserCreationForm):
     # Username and password are included by default through UserCreationForm.
@@ -69,6 +75,7 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ['username', 'password1', 'password2']
 
+
 class LoginForm(AuthenticationForm):
     # AuthenticationForm is not a ModelForm, so meta class would
     # have no effect here. It has username and password fields by
@@ -79,20 +86,20 @@ class LoginForm(AuthenticationForm):
     # is not data, unlike other forms.
     pass
 
+
 class ListingForm(forms.ModelForm):
     # Form to enter a new listing to the database.
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     pictures = MultipleFileField(label='Select files', required=False)
-    # pictures = forms.FileField(widget=ClearableFileInput(
-    #     attrs={'allow_multiple_selected': True}), required=False)
+
     class Meta:
         # This meta info class is used for ModelForms, whose fields are
         # defined based on what's in the corresponding model (listing model).
         # It determines which fields from the model to include in the form.
         model = Listing
-        fields=['address_line_1', 'city', 'state', 'zip_code', 'rent',
-                 'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count', 'description']
+        fields = ['address_line_1', 'city', 'state', 'zip_code', 'rent',
+                  'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count', 'description']
 
     def clean_start_date(self):
         start_date = self.cleaned_data['start_date']
@@ -124,16 +131,20 @@ class ListingForm(forms.ModelForm):
             raise forms.ValidationError("End date must be later than start date.")
         return cleaned_data
 
+
 class SearchForm(forms.Form):
     selected_city = forms.ChoiceField(
         choices=SUPPORTED_CITIES,
         widget=forms.Select(attrs={'id': 'city-selector'})
     )
-    
+
+
 class SendMessageForm(forms.ModelForm):
-    body = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'id': 'listing-message-textarea'}))
+    body = forms.CharField(widget=forms.Textarea(
+        attrs={'rows': 4, 'id': 'listing-message-textarea'}))
     recipient_id = forms.IntegerField(widget=forms.HiddenInput())
     listing_id = forms.IntegerField(widget=forms.HiddenInput())
+
     class Meta:
         model = Message
         fields = ['body']
