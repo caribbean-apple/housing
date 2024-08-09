@@ -7,9 +7,9 @@ Project Description: This repo hosts all the code for a sublease housing applica
 
 Requirements: See the requirements.txt file 
 
+Youtube Video Link: https://www.youtube.com/watch?v=EB2120FxKmk
+
 File Breakdown and Description
-
-
 
 In Sublets:
 
