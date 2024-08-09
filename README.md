@@ -1,10 +1,38 @@
 # housing
+Title: Sublease Listing and Finding Website
+Authors: Felix Feist and Tadhg Scannell
+Semesster: Summer 2024
+
+Project Description:
+
+Requirements: See the requirements.txt file 
+
+File Breakdown and Description
+
+    Models
+
+    Forms
+
+    Urls:
+
+    Tests:
+
+    Views:
+
+    Static:
+
+    Templates:
+
+
+Major Design Decisions:
+
 Runing list of things to work on 
     Delete listing available to all users - solved   
         Attempted to solve.
     No current way to favorite items
     No way to deactivate a listing if the user owns it.
     Create listing photos uploads neads work.  Need to figure out the multiple photo upload. - solved
+    No photos in listing only showed if no photos in any listing. need to address.
 
 
 Challenges Experienced:

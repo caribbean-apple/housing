@@ -7,6 +7,7 @@ from django.utils import timezone
 
 class User(AbstractUser):
     saved_listings = models.ManyToManyField("Listing", related_name="users_who_saved")
+    email= models.CharField(max_length=35, null=True)
 
 
 class UserProfile(models.Model):

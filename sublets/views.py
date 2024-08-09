@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -9,16 +10,46 @@ import json
 from .forms import UserRegistrationForm, LoginForm, ListingForm
 from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .models import User, Listing, ListingPicture, Message, ProfilePicture
+from django.core.mail import send_mail
 
 # Function for a user to see their saved lisitings
 
 
 @login_required
 def saved_listings(request):
-    # I'm too lazy to add Pagination for now
+
     user = request.user
-    listings = user.saved_listings.all()
-    context = {'saved_listings': listings}
+
+    if request.method == "POST":
+        
+        user.email=request.POST.get('email')
+        message="User Email Updated"
+    else:
+        message=""
+
+    relevant_pages = user.saved_listings.all()
+
+    listing_ids = relevant_pages.values_list('id', flat=True)
+
+    queryset = ListingPicture.objects.none()
+
+    for x in listing_ids:
+        queryset |= ListingPicture.objects.filter(listing=Listing.objects.get(pk=x))[:2]
+
+    # Intialize page for pagination
+    if request.GET.get('page'):
+        page = request.GET.get('page')
+    else:
+        page = 1
+
+    paginated_pages = Paginator(relevant_pages, 2)
+    page_obj = paginated_pages.get_page(page)
+
+
+    context = {'saved_listings': page_obj,
+               "listing_pictures": queryset,
+               "message": message
+               }
     return render(request, 'sublets/saved-listings.html', context)
 
 # Function to save or unsave a listing.  Asynconous call from the listing page.
@@ -30,12 +61,26 @@ def save_or_unsave_listing(request):
     # Handle the PUT request from JS
     data = json.loads(request.body)
     listing_id = data.get('listingId')
+    listing = Listing.objects.get(pk=listing_id)
     save_or_unsave = data.get('saveorunsaveAction')
     user = request.user
+
+    email_from=settings.EMAIL_HOST_USER
+    recipient_list=["scannellstp@gmail.com","sscanne2@alumni.nd.edu"]
+
+    body="You saved the listing"+ str(listing.address_line_1)
+    send_mail(
+        "You saved a listing",
+        body,
+        recipient_list,
+        email_from,
+        fail_silently=False,
+    )
 
     # Execute requests against save or unsave.  If neither option, return non valid selection.
     if save_or_unsave == "save":
         user.saved_listings.add(listing_id)
+
         return JsonResponse(
             {'message': 'Listing saved successfully.'},
             status=200)
