@@ -9,7 +9,9 @@ Sublets - Saved Listings
     <form action="{% url 'saved_listings' %}" method="post" style="margin:auto;">
         {% csrf_token %}
 
-        <input type="Text" name="email" placeholder="Enter contact email here"></input>
+        {{ email_form.email }}
+        {{ email_form.errors }}
+        {% comment %} <input type="Text" name="email" placeholder="Enter contact email here"></input> {% endcomment %}
 
         <button type="submit">Submit</button>
     </form>
@@ -19,9 +21,9 @@ Sublets - Saved Listings
 {% for listing in saved_listings %}
 
 
-    <div class="parent" style="width: 75%; margin:auto; border:2px solid green;">
+    <div class="parent" style="width: 100%; margin:auto;">
 
-        <div class="child" style="border:2px solid red; width:50%;  display: inline-block;">   
+        <div class="child" style="width:50%;  display: inline-block;">   
             
             <p>
             Listing by: <a href="{% url 'profile' listing.created_by.id %}">
@@ -31,12 +33,12 @@ Sublets - Saved Listings
             Zip: {{ listing.zip_code }} <br>
             Rent: {{ listing.rent }} <br>
             Timeframe: {{ listing.start_date }} to {{ listing.end_date}}<br>
-            Type: {{ listin.listing_type }}<br>
+            <!--Type: {{ listing.listing_type }}<br>-->
             Description: {{ listing.description }}<br>
             <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary">See more</a>
             </p>
             </div> 
-        <div class="child" style="width:49%; border:2px solid blue; display: inline-block; ">
+        <div class="child" style="width:49%; display: inline-block; ">
 
             <div class="row">
                 {% for pic in listing_pictures %}

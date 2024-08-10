@@ -1,11 +1,8 @@
 from django import forms
-from django.forms import ClearableFileInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.core.validators import FileExtensionValidator
-
 import datetime
 from .models import User, Listing, Message, UserProfile
-from .util import file_size_5mb
+
 
 SUPPORTED_CITIES = [
     ('Boston Area', 'Boston Area'),
@@ -14,11 +11,30 @@ SUPPORTED_CITIES = [
 ]
 
 
+class UserEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+
 class MultipleFileInput(forms.ClearableFileInput):
+    """
+    This class is an ingredient for our MultipleFileField class,
+    which allows for multiple file uploads.
+    """
     allow_multiple_selected = True
-    
+
 
 class MultipleFileField(forms.FileField):
+    """
+    This is a custom form for inputting multiple photos here.
+    It feeds into UserProfileForm and ListingForm, to allow uploads
+    of multiple photos for profiles and sublet listings.
+    The default form only accepts submission of one file in django 5.0.7,
+    so this was our solution.
+    This was created with help from a wise user on stackexchange who had
+    the same issue we encountered.
+    """
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("widget", MultipleFileInput())
         super().__init__(*args, **kwargs)
@@ -35,13 +51,6 @@ class MultipleFileField(forms.FileField):
 class UserProfileForm(forms.ModelForm):
     user_id = forms.IntegerField(widget=forms.HiddenInput())
     pictures = MultipleFileField(label='Select files', required=False)
-    # pictures = forms.FileField(widget=forms.ClearableFileInput(
-    #     attrs={'allow_multiple_selected': True}), 
-    #     required=False,
-    #     validators=[
-    #         FileExtensionValidator(['jpg', 'jpeg', 'gif', 'png', 'webp']),
-    #         file_size_5mb
-    #     ])
 
     class Meta:
         model = UserProfile
@@ -50,7 +59,7 @@ class UserProfileForm(forms.ModelForm):
             'looking_for': forms.Textarea(attrs={'rows': 4, 'cols': 45}),
             'about_me': forms.Textarea(attrs={'rows': 4, 'cols': 45}),
         }
-    
+
     def process_and_save(self, profile_user=None, commit=True):
         if profile_user is None:
             raise ValueError("Must specify user_id to save a UserProfile.")
@@ -61,7 +70,7 @@ class UserProfileForm(forms.ModelForm):
         if commit:
             profile.save()
         return profile
-    
+
 
 class UserRegistrationForm(UserCreationForm):
     # Username and password are included by default through UserCreationForm.
@@ -89,7 +98,8 @@ class LoginForm(AuthenticationForm):
 
 class ListingForm(forms.ModelForm):
     # Form to enter a new listing to the database.
-    start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    start_date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}))
     end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     pictures = MultipleFileField(label='Select files', required=False)
 
@@ -99,7 +109,8 @@ class ListingForm(forms.ModelForm):
         # It determines which fields from the model to include in the form.
         model = Listing
         fields = ['address_line_1', 'city', 'state', 'zip_code', 'rent',
-                  'listing_type', 'start_date', 'end_date', 'bathroom_count', 'bedroom_count', 'description']
+                  'listing_type', 'start_date', 'end_date',
+                  'bathroom_count', 'bedroom_count', 'description']
 
     def clean_start_date(self):
         start_date = self.cleaned_data['start_date']
@@ -107,28 +118,29 @@ class ListingForm(forms.ModelForm):
         if start_date and start_date < datetime.date.today():
             raise forms.ValidationError("Start date cannot be in the past.")
         return start_date
-        
+
     def clean_end_date(self):
         end_date = self.cleaned_data['end_date']
         if end_date and end_date < datetime.date.today():
             raise forms.ValidationError("End date cannot be in the past.")
         return end_date
-        
+
     def clean_bedroom_count(self):
         bedroom_count = self.cleaned_data['bedroom_count']
         if bedroom_count < 1:
-            raise forms.ValidationError("Listings must have at least one bedroom.")
+            raise forms.ValidationError(
+                "Listings must have at least one bedroom.")
         return bedroom_count
-    
+
     def clean(self):
-        print("CLEANING")
         # Must call super().clean() in clean(), but not in clean_x.
         # This is enough to run the validation defined in ModelForm.
         cleaned_data = super().clean()
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')
         if start_date and end_date and end_date < start_date:
-            raise forms.ValidationError("End date must be later than start date.")
+            raise forms.ValidationError(
+                "End date must be later than start date.")
         return cleaned_data
 
 
@@ -156,8 +168,10 @@ class SendMessageForm(forms.ModelForm):
             raise ValueError("Check if message form is valid before saving.")
         message = super().save(commit=False)
         message.sender = sender
-        message.recipient = User.objects.get(id=self.cleaned_data['recipient_id'])
-        message.listing = Listing.objects.get(id=self.cleaned_data['listing_id'])
+        message.recipient = User.objects.get(
+            id=self.cleaned_data['recipient_id'])
+        message.listing = Listing.objects.get(
+            id=self.cleaned_data['listing_id'])
         if commit:
             message.save()
         return message

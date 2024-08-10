@@ -9,13 +9,6 @@ body {
     color: red;
 }
 
-.verticalspace {
-    height: 60px;
-}
-
-#city-selector {
-    width: 150px;
-}
 
 .listingpicture {
     width: 200px;
@@ -34,6 +27,7 @@ body {
     max-width: 600px;
 }
 
+/* Landing page */
 @keyframes fade-in {  
     0% {
       opacity: 0;
@@ -42,18 +36,30 @@ body {
       opacity:1;
     }
 }
+
 .fade-in {
     animation: fade-in 1s ease-in;
-    /* animation-duration: 2s; //take 2s to interpolate between frames
-    animation-fill-mode: forwards; // normal fwds interpolation
-    animation-play-state: paused; // start paused, then activate later. */
-  }
+}
+.verticalspace {
+    height: 60px;
+}
 
-  #additional-filter-area {
+#city-selector {
+    width: 150px;
+}
+
+
+
+/* Search results page */
+.slim-btn {
+    height: 30px;
+}
+
+#additional-filter-area {
     display: flex;
     gap: 10px;
-  }
-
-  .slim-btn {
-    height: 30px;
-  }
+}
+/* Messages page */
+/* #respond {
+    display: none;
+} */
