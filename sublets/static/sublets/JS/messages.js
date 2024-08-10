@@ -5,6 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#respond').style.display = 'none';
   document.querySelector('#response_form').style.display = 'none';
 
+  window.addEventListener('popstate', e => {
+    if (e.state.page === 'inbox') {
+      load_messages();
+    }
+    if (e.state.page === 'reply') {
+      respond(e.state.id);
+    }
+  })
+
+  if (!history.state) {
+    history.replaceState({page: 'inbox'}, "", '/message-inbox');
+  }
+  
   load_messages()
 
 })
@@ -15,6 +28,11 @@ function load_messages() {
   // Show compose view and hide other views
   document.querySelector('#show-messages').style.display = 'block';
   document.querySelector('#respond').style.display = 'none';
+  document.querySelector('#response_form').style.display = 'none';
+
+  if (!history.state || history.state.page !== 'inbox') {
+    history.replaceState({page: 'inbox'}, "", '/message-inbox');
+  }
 
   // Select the two buttons for both the archive and respond button
   const message_button = document.querySelectorAll(".message_button");
@@ -38,6 +56,8 @@ function respond(id){
   document.querySelector('#response_form').style.display = 'block';
   document.querySelector('#show-messages').style.display = 'none';
 
+  history.pushState({page: 'reply', id: id}, "", `/message-reply/${id}`);
+
   //TODO Get message information and populate the javascript
 
   individual_message_confirm=fetch('/message_info/'+id)      
@@ -46,7 +66,6 @@ function respond(id){
 
                 document.querySelector('#respond_message').innerHTML = `
                 <hr>
-                  ID: ${String(single_message.id)} <br>
                   Sender: ${single_message.sender} <br>
                   Recipients: ${single_message.recipient} <br>
                   Listing: ${single_message.listing}<br>

@@ -6,3 +6,6 @@ db.sqlite3
 
 # Virtual environment
 django-updated/
+
+# Local settings that should not be distributed, like an API key 
+/housing/local_settings.py

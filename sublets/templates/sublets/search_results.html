@@ -46,7 +46,7 @@ Additional Filters:
             Zip: {{ listing.zip_code }} <br>
             Rent: {{ listing.rent }} <br>
             Timeframe: {{ listing.start_date }} to {{ listing.end_date}}<br>
-            Type: {{ listin.listing_type }}<br>
+            <!-- Type: {{ listing.listing_type }}<br> -->
             Description: {{ listing.description }}<br>
             <a href="{% url 'listing' listing_id=listing.id %}" class="btn btn-primary btn-sm">See more</a>
             </p>

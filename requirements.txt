@@ -3,7 +3,4 @@
 Django==4.1
 Pillow==9.4.0
 Selenium==4.23.1
-Celery==5.4.0
-
-# Google mail api.
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+Sendgrid==6.11.0

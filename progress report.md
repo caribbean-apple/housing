@@ -6,17 +6,27 @@ Those marked with ~ are in progress (with a comment below)
 === INCOMPLETE ONLY ===
 Separated out the complete stuff to leave only the incomplete.
 
-#### Saved Listings Page
-
-O On the saved listings page, you can enter your email to be notified if any of your saved listings get edited or deleted. You will receive an actual email to that email address letting you know if so (assuming you put in a real email address)
 
 #### Additional Features / Tasks
 
-O Any single-page app features (like in the inbox) still have browser history and back button support
+
+O Make README file
+In a README file (whose extension can be .txt, .md, .adoc, or .pdf) in your project’s main directory, include a full write-up describing your project, what’s contained in each file you created, why you made certain design decisions, and any other additional information the staff should know about your project. This document should be sufficiently thorough for your teaching fellow to run your project without any need to contact you further with questions. Take your time, and do not save this step for last. A well-written and complete README file will take longer than you think it will.
+
+O rename search_results to search-results.html
+
+O On Listing page, your own listing should not show in featured.
+
+O On saved listings page, if first listing doesn't have photos and second does, there is a problem
+No photos in listing only showed if no photos in any listing. need to address.
+
+O Redo pictures to not be that small for mobile responsiveness
 
 O Check everything for mobile responsiveness
 
 O Clean everything up at the end for design and style
+
+O check for too big filesize (or delete the code and util)
 
 =======================================================
 

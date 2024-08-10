@@ -17,18 +17,14 @@ urlpatterns = [
     path("profile/<int:user_id>/", views.profile, name="profile"),
     path("profile-setup", views.profile_setup, name="profile_setup"),
     path("sent-inbox", views.sent_inbox, name="sent_inbox"),
-    path("save-or-unsave-listing", views.save_or_unsave_listing, 
+    path("save-or-unsave-listing", views.save_or_unsave_listing,
          name="save_or_unsave_listing"),
     # Add robots.txt to prevent scraping
     path("robots.txt",
-         TemplateView.as_view(template_name="robots.txt", 
+         TemplateView.as_view(template_name="robots.txt",
                               content_type="text/plain"), name="robots"),
 
-
     # API Calls for Asyncronous calls for messages.
-    # Felix: I am getting an error from this:
-    # AttributeError: module 'sublets.views' has no attribute 'message_fetch'
-    # So I have commented it out.
-    path("message_info/<int:message_id>", views.message_fetch, name="fetchmessage"),
-    
+    path("message_info/<int:message_id>", 
+         views.message_fetch, name="fetchmessage"),
 ]
