@@ -11,6 +11,12 @@ Youtube Video Link: https://www.youtube.com/watch?v=EB2120FxKmk
 
 File Breakdown and Description
 
+Housing:
+    settings.py: Holds all relevant information.
+
+Media:
+    This is the folder where photos are stored to be used for listings and profiles.
+
 In Sublets:
 
     Models: The file contains all the database models for usage.  This includes Users and their profiles, listings, photos for the listings, and messages between users.
