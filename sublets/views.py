@@ -6,12 +6,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_http_methods
 import random
 import json
+import threading
+import logging
 from .forms import UserRegistrationForm, LoginForm, ListingForm
 from .forms import UserProfileForm, SendMessageForm, SearchForm
 from .forms import UserEmailForm
 from .models import User, Listing, ListingPicture, Message, ProfilePicture
 from .util import send_email
 
+
+# Here, __name__ will be "views". If it is not main, then it is
+# the name of the current file without extension.
+# python logging provides the following logging security levels:
+# DEBUG, INFO, WARNING, ERROR, CRITICAL
+logger = logging.getLogger(__name__)
 
 @login_required
 def saved_listings(request):
@@ -188,7 +196,11 @@ def listing(request, listing_id):
         if users_with_email:
             emails = users_who_saved.values_list('email', flat=True)
             for email in emails:
-                send_email(email, listing_object)
+                thread = threading.Thread(
+                    target=send_email,
+                    args=(email, listing_object, logger)
+                    )
+                thread.start()
         listing_object.delete()
         return JsonResponse(
             {'message': 'Successfully deleted listing.'},
